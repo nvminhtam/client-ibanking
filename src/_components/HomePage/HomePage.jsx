@@ -6,7 +6,7 @@ import { userActions } from '../../_actions';
 import './styles.css'
 class HomePage extends React.Component {
     componentDidMount() {
-        this.props.dispatch(userActions.getAll());
+        this.props.userActions
     }
 
     handleDeleteUser(id) {
@@ -74,7 +74,7 @@ class HomePage extends React.Component {
                         </li>
                         <li>
                             <a href="#">
-                                <i className="zmdi zmdi-settings"></i> Thông tin 
+                                <i className="zmdi zmdi-settings"></i> Thông tin
                             </a>
                         </li>
                         <li>
@@ -94,7 +94,7 @@ class HomePage extends React.Component {
                                     </a>
                                 </li>
                                 <li>
-                                <Link to="/login">Logout</Link>
+                                    <Link to="/login">Logout</Link>
                                 </li>
                             </ul>
                         </div>
@@ -102,7 +102,7 @@ class HomePage extends React.Component {
                     <div className="container-fluid">
                         <h1>Danh sách tài khoản</h1>
                         <p>
-                            
+
                         </p>
                     </div>
                 </div>
@@ -120,5 +120,9 @@ function mapStateToProps(state) {
     };
 }
 
-const connectedHomePage = connect(mapStateToProps)(HomePage);
+const mapDispatchToProps = (dispatch) => ({
+    userActions: () => dispatch(userActions.getAll())
+});
+
+const connectedHomePage = connect(mapStateToProps, mapDispatchToProps)(HomePage);
 export { connectedHomePage as HomePage };
