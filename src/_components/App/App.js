@@ -25,12 +25,12 @@ class App extends React.Component {
     render() {
         const { alert } = this.props;
         return (
-            <div style={{ height: 100 + "%" }}>
+            <div >
                 {alert.message &&
                     <div className={`alert ${alert.type}`}>{alert.message}</div>
                 }
-                <Router history={history} style={{ height: 100 + "%" }}>
-                    <div style={{ height: 100 + "%" }}>
+                <Router history={history}>
+                    <div >
                         <PrivateRoute exact path="/" component={HomePage} />
                         <PrivateRoute path="/transfer" component={TransferPage} />
 
