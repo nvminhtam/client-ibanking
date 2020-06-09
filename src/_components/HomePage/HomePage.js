@@ -82,15 +82,12 @@ class HomePage extends React.Component {
             });
         };
         const handleClick = e => {
-            console.log('click ', e);
             this.setState({
                 key: e.key,
             });
-            console.log(this.state.key)
         };
         return (
             <div className="row" >
-                {users.error && <span className="text-danger">ERROR: {users.error}</span>}
                 <div className="col-2" style={{ backgroundColor: '#000c17' }}>
                     <div style={{ width: 200 }} >
                         <Button type="primary" onClick={toggleCollapsed} >
@@ -128,8 +125,10 @@ class HomePage extends React.Component {
                         </Menu>
                     </div>
                 </div>
-                <div className="col-9 p-5">
-                    {comp[this.state.key].title}
+                <div className="col-9 p-5">  {comp[this.state.key].title}
+                    {users.error && <span className="text-danger">ERROR: {users.error}</span>}
+
+
                     {comp[this.state.key].content}
 
                 </div>

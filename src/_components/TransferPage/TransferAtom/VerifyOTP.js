@@ -9,11 +9,11 @@ const layout = {
 class VerifyOTP extends Component {
     render() {
         const onFinish = values => {
-            console.log('Success:', values);
+            // console.log('Success:', values);
         };
 
         const onFinishFailed = errorInfo => {
-            console.log('Failed:', errorInfo);
+            //  console.log('Failed:', errorInfo);
         };
 
         return (
@@ -25,16 +25,17 @@ class VerifyOTP extends Component {
                 onFinishFailed={onFinishFailed}
             >
                 <Form.Item className="border-bottom border-light p-3"
-                    label="Verify OTP" extra="We must make sure that your are a human.">
+                    label="Verify OTP"
+                    extra="Time lefts: "
+                    name="verifyOTP">
                     <Row gutter={8}>
                         <Col span={12}>
                             <Form.Item
-                                name="verifyOTP"
                                 noStyle
                                 rules={[
                                     {
                                         required: true,
-                                        message: 'Please input the captcha you got!',
+                                        message: 'Please input the OTP you got!',
                                     },
                                 ]}
                             >
