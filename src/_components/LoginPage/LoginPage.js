@@ -1,8 +1,9 @@
 import React from 'react';
 import { Link } from 'react-router-dom';
 import { connect } from 'react-redux';
-
+import Recaptcha from 'react-recaptcha'
 import { userActions } from '../../_actions';
+
 
 class LoginPage extends React.Component {
     constructor(props) {
@@ -14,11 +15,13 @@ class LoginPage extends React.Component {
         this.state = {
             username: '',
             password: '',
-            submitted: false
+            submitted: false,
+            verified: false
         };
 
         this.handleChange = this.handleChange.bind(this);
         this.handleSubmit = this.handleSubmit.bind(this);
+        this.verifyCallback = this.verifyCallback.bind(this)
     }
 
     handleChange(e) {
@@ -29,22 +32,45 @@ class LoginPage extends React.Component {
     handleSubmit(e) {
         e.preventDefault();
 
-        this.setState({ submitted: true });
-        const { username, password } = this.state;
-        const { dispatch } = this.props;
-        if (username && password) {
-            dispatch(userActions.login(username, password));
+        if (!this.state.verified)
+            alert("you have to verify")
+        else {
+            this.setState({ submitted: true });
+            const { username, password } = this.state;
+            const { dispatch } = this.props;
+            if (username && password) {
+                dispatch(userActions.login(username, password));
+            }
         }
     }
 
+    onloadCallbackCaptcha() {
+        console.log("onloadCallbackCaptcha")
+    }
+
+    verifyCallback(respond) {
+        if (respond) {
+            this.setState({
+                verified: true
+            })
+        }
+    }
     render() {
         const { loggingIn } = this.props;
         const { username, password, submitted } = this.state;
         return (
-            <div className="container"style={{ marginTop: 200, backgroundColor: "#EEEEEE" }} >
+            <div className="container" style={{ marginTop: 200, backgroundColor: "#EEEEEE" }} >
+
                 <div className="col-md-4 col-md-offset-4" >
                     <h2>Login</h2>
+                    <Recaptcha
+                        sitekey="6LfQCaMZAAAAAFsv9S2IZsfw2XIDXZsozSY3NV5o"
+                        render="explicit"
+                        onloadCallback={() => this.onloadCallbackCaptcha}
+                        verifyCallback={this.verifyCallback}
+                    />
                     <form name="form" onSubmit={this.handleSubmit}>
+
                         <div className={'form-group' + (submitted && !username ? ' has-error' : '')}>
                             <label htmlFor="username">Username</label>
                             <input type="text" className="form-control" name="username" value={username} onChange={this.handleChange} />
