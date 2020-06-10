@@ -64,7 +64,9 @@ class HomePage extends React.Component {
         }
     }
     componentDidMount() {
-        this.props.userActions
+        const { userActions } = this.props
+        userActions();
+        // let user = JSON.parse(localStorage.getItem('user'));
     }
 
     handleDeleteUser(id) {
@@ -146,7 +148,8 @@ function mapStateToProps(state) {
 }
 
 const mapDispatchToProps = (dispatch) => ({
-    userActions: () => dispatch(userActions.getAll())
+    userActions: () => dispatch(userActions.getAll()),
+    getAccount: () => dispatch(userActions.getAccount()),
 });
 
 const connectedHomePage = connect(mapStateToProps, mapDispatchToProps)(HomePage);
