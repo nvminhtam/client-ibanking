@@ -16,13 +16,13 @@ import {
 } from '@ant-design/icons';
 
 import { TransferPage } from '../TransferPage'
-
+import { MyAccountPage } from '../MyAccountPage/MyAccountPage'
 const { SubMenu } = Menu;
 
 const comp = [
     {
         title: "Danh sach tai khoan",
-        content: "page1",
+        content: <MyAccountPage />,
     },
     {
         title: "Thong tin",
@@ -60,7 +60,7 @@ class HomePage extends React.Component {
         super(props)
         this.state = {
             collapsed: false,
-            key: "3"
+            key: "0"
         }
     }
     componentDidMount() {
@@ -94,7 +94,7 @@ class HomePage extends React.Component {
                             {React.createElement(this.state.collapsed ? MenuUnfoldOutlined : MenuFoldOutlined)}
                         </Button>
                         <Menu
-                            defaultSelectedKeys={['3']}
+                            defaultSelectedKeys={['0']}
                             defaultOpenKeys={['sub1', 'sub2', 'sub3']}
                             mode="inline"
                             theme="dark"
@@ -125,10 +125,8 @@ class HomePage extends React.Component {
                         </Menu>
                     </div>
                 </div>
-                <div className="col-9 p-5">  {comp[this.state.key].title}
+                <div className="col-9 p-5"> <h2> {comp[this.state.key].title}</h2>
                     {users.error && <span className="text-danger">ERROR: {users.error}</span>}
-
-
                     {comp[this.state.key].content}
 
                 </div>

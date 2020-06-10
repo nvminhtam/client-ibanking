@@ -19,22 +19,7 @@ const tailLayout = {
     wrapperCol: { offset: 8, span: 16 },
 };
 
-//begin 
-const renderTitle = title => (
-    <span>
-        {title}
-        <a
-            style={{
-                float: 'right',
-            }}
-            href=""
-            target="_blank"
-            rel="noopener noreferrer"
-        >
-            more
-      </a>
-    </span>
-);
+
 
 const accountInfo = (info = {}) => (
     <div>
@@ -60,20 +45,23 @@ const renderItem = (title, count) => ({
     ),
 });
 
-const options = [
+const options = (values = []) => [
     {
-        label: renderTitle('Libraries'),
-        options: [renderItem('28349', 10000), renderItem('35893', 10600)],
+        //  ((acc, i) => <Option value={acc.account_number} key={i}>{acc.account_number}</Option>)
+        // label: renderTitle('Libraries'),;
+        options: values.map((value, i) => renderItem(value.beneficiary_account, value.beneficiary_name)),
     },
-    {
-        label: renderTitle('Solutions'),
-        options: [renderItem('AntDesign UI FAQ', 60100), renderItem('AntDesign FAQ', 30010)],
-    },
-    {
-        label: renderTitle('Articles'),
-        options: [renderItem('AntDesign design language', 100000)],
-    },
+    
+    // {
+    //     // label: renderTitle('Solutions'),
+    //     options: [renderItem('AntDesign UI FAQ', 60100), renderItem('AntDesign FAQ', 30010)],
+    // },
+    // {
+    //     label: renderTitle('Articles'),
+    //     options: [renderItem('AntDesign design language', 100000)],
+    // },
 ];
+
 
 const accounts = (account = []) => (
     account.map((acc, i) => <Option value={acc.account_number} key={i}>{acc.account_number}</Option>)
@@ -92,9 +80,9 @@ class Beneficiary extends Component {
     }
 
     componentDidMount() {
-        const { getAccount } = this.props
+        const { getAccount, getListBeneficiaryAccount } = this.props
         getAccount();
-
+        getListBeneficiaryAccount();
     }
 
 
@@ -102,8 +90,15 @@ class Beneficiary extends Component {
         const onFinish = values => {
             console.log('Success:', values);
 
-            const { getBeneficiaryAccount, getAccount } = this.props
+            const { getBeneficiaryAccount } = this.props
             getBeneficiaryAccount({ account_number: values.BeneficiaryAccount });
+            const { accountBeneficiary, listAccountBeneficiary } = this.props
+            this.setState({
+                accountOwner: values.ownerAccount,
+                accountBeneficiary,
+                listAccountBeneficiary
+            })
+            console.log(this.state)
         };
 
         const onFinishFailed = errorInfo => {
@@ -111,7 +106,7 @@ class Beneficiary extends Component {
         };
 
 
-        const { accountOwner, accountBeneficiary } = this.props
+        const { accountOwner, accountBeneficiary, listAccountBeneficiary } = this.props
 
         return (
             <div>
@@ -140,7 +135,7 @@ class Beneficiary extends Component {
                         name="BeneficiaryAccount">
                         <AutoComplete
                             dropdownClassName="certain-category-search-dropdown"
-                            options={options}
+                            options={options(listAccountBeneficiary)}
                         >
                             <Input.Search size="large" placeholder="input here" />
                         </AutoComplete>
@@ -173,13 +168,15 @@ class Beneficiary extends Component {
 function mapStateToProps(state) {
     return {
         accountOwner: state.users.accountOwner,
-        accountBeneficiary: state.users.accountBeneficiary
+        accountBeneficiary: state.users.accountBeneficiary,
+        listAccountBeneficiary: state.users.accountBeneficiarys
     };
 }
 
 const mapDispatchToProps = (dispatch) => ({
     getAccount: () => dispatch(userActions.getAccount()),
-    getBeneficiaryAccount: (accNumber) => dispatch(userActions.getBeneficiaryAccount(accNumber))
+    getBeneficiaryAccount: (accNumber) => dispatch(userActions.getBeneficiaryAccount(accNumber)),
+    getListBeneficiaryAccount: () => dispatch(userActions.getBeneficiaryAccounts()),
 });
 
 

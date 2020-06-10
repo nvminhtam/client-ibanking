@@ -14,6 +14,7 @@ export function users(state = {}, action) {
       };
     case userConstants.GETALL_FAILURE:
       return {
+        ...state,
         error: action.error
       };
 
@@ -31,6 +32,7 @@ export function users(state = {}, action) {
       }
     case userConstants.GET_ACCOUNOWNERTINFO_FAILURE:
       return {
+        ...state,
         error: action.error
       };
 
@@ -46,6 +48,24 @@ export function users(state = {}, action) {
       };
     case userConstants.GET_ACCOUNTINFO_FAILURE:
       return {
+        ...state,
+        error: action.error
+      };
+
+
+    case userConstants.GET_LISTACCOUNTINFO_REQUEST:
+      return {
+        ...state,
+        loading: true
+      };
+    case userConstants.GET_LISTACCOUNTINFO_SUCCESS:
+      return {
+        ...state,
+        accountBeneficiarys: action.accountBeneficiarys || {}
+      };
+    case userConstants.GET_LISTACCOUNTINFO_FAILURE:
+      return {
+        ...state,
         error: action.error
       };
 

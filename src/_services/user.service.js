@@ -9,6 +9,7 @@ export const userService = {
     update,
     getAccount,
     getBeneficiaryAccount,
+    getBeneficiaryAccounts,
     delete: _delete
 };
 
@@ -69,6 +70,16 @@ function getBeneficiaryAccount(accountInfo) {
         body: JSON.stringify(accountInfo)
     };
     return fetch(config.apiUrl + '/api/account/', requestOptions).then(handleResponse, handleError);
+
+
+}
+
+function getBeneficiaryAccounts() {
+    const requestOptions = {
+        method: 'GET',
+        headers: { ...authHeader() },
+    };
+    return fetch(config.apiUrl + '/api/customer/beneficiaries', requestOptions).then(handleResponse, handleError);
 
 
 }

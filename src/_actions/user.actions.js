@@ -10,6 +10,7 @@ export const userActions = {
     getAll,
     getAccount,
     getBeneficiaryAccount,
+    getBeneficiaryAccounts,
     delete: _delete
 };
 
@@ -132,5 +133,25 @@ function getBeneficiaryAccount(accountInfor) {
     function request() { return { type: userConstants.GET_ACCOUNTINFO_REQUEST } }
     function success(accountBeneficiary) { return { type: userConstants.GET_ACCOUNTINFO_SUCCESS, accountBeneficiary } }
     function failure(error) { return { type: userConstants.GET_ACCOUNTINFO_FAILURE, error } }
+
+}
+
+
+
+function getBeneficiaryAccounts() {
+    console.log("getBeneficiaryAccounts");
+    return dispatch => {
+        dispatch(request());
+
+        userService.getBeneficiaryAccounts()
+            .then(
+                accountBeneficiarys => dispatch(success(accountBeneficiarys)),
+                error => dispatch(failure(error))
+            );
+    };
+
+    function request() { return { type: userConstants.GET_LISTACCOUNTINFO_REQUEST } }
+    function success(accountBeneficiarys) { return { type: userConstants.GET_LISTACCOUNTINFO_SUCCESS, accountBeneficiarys } }
+    function failure(error) { return { type: userConstants.GET_LISTACCOUNTINFO_FAILURE, error } }
 
 }
