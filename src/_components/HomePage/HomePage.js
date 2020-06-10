@@ -19,12 +19,13 @@ import { TransferPage } from '../TransferPage'
 import  {Contacts}  from './Contacts/Contacts';
 import EditableTable from './Contacts/edit';
 
+import { MyAccountPage } from '../MyAccountPage/MyAccountPage'
 const { SubMenu } = Menu;
 
 const comp = [
     {
         title: "Danh sach tai khoan",
-        content: "page1",
+        content: <MyAccountPage />,
     },
     {
         title: "Thong tin",
@@ -62,11 +63,13 @@ class HomePage extends React.Component {
         super(props)
         this.state = {
             collapsed: false,
-            key: "3"
+            key: "0"
         }
     }
     componentDidMount() {
-        this.props.userActions
+        const { userActions } = this.props
+        userActions();
+        // let user = JSON.parse(localStorage.getItem('user'));
     }
 
     handleDeleteUser(id) {
@@ -84,22 +87,19 @@ class HomePage extends React.Component {
             });
         };
         const handleClick = e => {
-            console.log('click ', e);
             this.setState({
                 key: e.key,
             });
-            console.log(this.state.key)
         };
         return (
             <div className="row" >
-                {users.error && <span className="text-danger">ERROR: {users.error}</span>}
                 <div className="col-2" style={{ backgroundColor: '#000c17' }}>
                     <div style={{ width: 200 }} >
                         <Button type="primary" onClick={toggleCollapsed} >
                             {React.createElement(this.state.collapsed ? MenuUnfoldOutlined : MenuFoldOutlined)}
                         </Button>
                         <Menu
-                            defaultSelectedKeys={['3']}
+                            defaultSelectedKeys={['0']}
                             defaultOpenKeys={['sub1', 'sub2', 'sub3']}
                             mode="inline"
                             theme="dark"
@@ -130,8 +130,8 @@ class HomePage extends React.Component {
                         </Menu>
                     </div>
                 </div>
-                <div className="col-9 p-5">
-                    {comp[this.state.key].title}
+                <div className="col-9 p-5"> <h2> {comp[this.state.key].title}</h2>
+                    {users.error && <span className="text-danger">ERROR: {users.error}</span>}
                     {comp[this.state.key].content}
                     
 
@@ -152,7 +152,8 @@ function mapStateToProps(state) {
 }
 
 const mapDispatchToProps = (dispatch) => ({
-    userActions: () => dispatch(userActions.getAll())
+    userActions: () => dispatch(userActions.getAll()),
+    getAccount: () => dispatch(userActions.getAccount()),
 });
 
 const connectedHomePage = connect(mapStateToProps, mapDispatchToProps)(HomePage);

@@ -4,16 +4,71 @@ export function users(state = {}, action) {
   switch (action.type) {
     case userConstants.GETALL_REQUEST:
       return {
+        ...state,
         loading: true
       };
     case userConstants.GETALL_SUCCESS:
       return {
+        ...state,
         items: action.users
       };
     case userConstants.GETALL_FAILURE:
-      return { 
+      return {
+        ...state,
         error: action.error
       };
+
+    case userConstants.GET_ACCOUNOWNERTINFO_REQUEST:
+      return {
+        ...state,
+        loading: true
+      };
+    case userConstants.GET_ACCOUNOWNERTINFO_SUCCESS:
+      {
+        return {
+          ...state,
+          accountOwner: action.accountOwner || {}
+        };
+      }
+    case userConstants.GET_ACCOUNOWNERTINFO_FAILURE:
+      return {
+        ...state,
+        error: action.error
+      };
+
+    case userConstants.GET_ACCOUNTINFO_REQUEST:
+      return {
+        ...state,
+        loading: true
+      };
+    case userConstants.GET_ACCOUNTINFO_SUCCESS:
+      return {
+        ...state,
+        accountBeneficiary: action.accountBeneficiary || {}
+      };
+    case userConstants.GET_ACCOUNTINFO_FAILURE:
+      return {
+        ...state,
+        error: action.error
+      };
+
+
+    case userConstants.GET_LISTACCOUNTINFO_REQUEST:
+      return {
+        ...state,
+        loading: true
+      };
+    case userConstants.GET_LISTACCOUNTINFO_SUCCESS:
+      return {
+        ...state,
+        accountBeneficiarys: action.accountBeneficiarys || {}
+      };
+    case userConstants.GET_LISTACCOUNTINFO_FAILURE:
+      return {
+        ...state,
+        error: action.error
+      };
+
     case userConstants.DELETE_REQUEST:
       // add 'deleting:true' property to user being deleted
       return {

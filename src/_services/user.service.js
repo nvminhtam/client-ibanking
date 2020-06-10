@@ -7,6 +7,9 @@ export const userService = {
     getAll,
     getById,
     update,
+    getAccount,
+    getBeneficiaryAccount,
+    getBeneficiaryAccounts,
     delete: _delete
 };
 
@@ -25,7 +28,6 @@ function login(username, password) {
                 // store user details and jwt token in local storage to keep user logged in between page refreshes
                 localStorage.setItem('user', JSON.stringify(user));
             }
-            console.log(user);
             return user;
         });
 }
@@ -53,8 +55,36 @@ function getById(id) {
     return fetch(config.apiUrl + '/users/' + _id, requestOptions).then(handleResponse, handleError);
 }
 
+function getAccount() {
+    const requestOptions = {
+        method: 'GET',
+        headers: authHeader()
+    };
+    return fetch(config.apiUrl + '/api/customer/accounts', requestOptions).then(handleResponse, handleError);
+}
+
+function getBeneficiaryAccount(accountInfo) {
+    const requestOptions = {
+        method: 'POST',
+        headers: { ...authHeader(), 'Content-Type': 'application/json' },
+        body: JSON.stringify(accountInfo)
+    };
+    return fetch(config.apiUrl + '/api/account/', requestOptions).then(handleResponse, handleError);
+
+
+}
+
+function getBeneficiaryAccounts() {
+    const requestOptions = {
+        method: 'GET',
+        headers: { ...authHeader() },
+    };
+    return fetch(config.apiUrl + '/api/customer/beneficiaries', requestOptions).then(handleResponse, handleError);
+
+
+}
+
 function register(user) {
-    console.log(user);
     const requestOptions = {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
@@ -73,6 +103,8 @@ function update(user) {
     return null
     // return fetch(config.apiUrl + '/users/' + user.id, requestOptions).then(handleResponse, handleError);
 }
+
+
 
 // prefixed function name with underscore because delete is a reserved word in javascript
 

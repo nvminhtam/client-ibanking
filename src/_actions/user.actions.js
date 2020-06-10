@@ -8,6 +8,9 @@ export const userActions = {
     logout,
     register,
     getAll,
+    getAccount,
+    getBeneficiaryAccount,
+    getBeneficiaryAccounts,
     delete: _delete
 };
 
@@ -17,7 +20,7 @@ function login(username, password) {
 
         userService.login(username, password)
             .then(
-                user => { 
+                user => {
                     dispatch(success(user));
                     history.push('/');
                 },
@@ -44,7 +47,7 @@ function register(user) {
 
         userService.register(user)
             .then(
-                () => { 
+                () => {
                     dispatch(success());
                     history.push('/login');
                     dispatch(alertActions.success('Registration successful'));
@@ -84,7 +87,7 @@ function _delete(id) {
 
         userService.delete(id)
             .then(
-                () => { 
+                () => {
                     dispatch(success(id));
                 },
                 error => {
@@ -96,4 +99,59 @@ function _delete(id) {
     function request(id) { return { type: userConstants.DELETE_REQUEST, id } }
     function success(id) { return { type: userConstants.DELETE_SUCCESS, id } }
     function failure(id, error) { return { type: userConstants.DELETE_FAILURE, id, error } }
+}
+
+function getAccount() {
+    return dispatch => {
+        dispatch(request());
+
+        userService.getAccount()
+            .then(
+                accountOwner => dispatch(success(accountOwner)),
+                error => dispatch(failure(error))
+            );
+    };
+
+    function request() { return { type: userConstants.GET_ACCOUNOWNERTINFO_REQUEST } }
+    function success(accountOwner) { return { type: userConstants.GET_ACCOUNOWNERTINFO_SUCCESS, accountOwner } }
+    function failure(error) { return { type: userConstants.GET_ACCOUNOWNERTINFO_FAILURE, error } }
+
+}
+
+
+function getBeneficiaryAccount(accountInfor) {
+    return dispatch => {
+        dispatch(request());
+
+        userService.getBeneficiaryAccount(accountInfor)
+            .then(
+                accountBeneficiary => dispatch(success(accountBeneficiary)),
+                error => dispatch(failure(error))
+            );
+    };
+
+    function request() { return { type: userConstants.GET_ACCOUNTINFO_REQUEST } }
+    function success(accountBeneficiary) { return { type: userConstants.GET_ACCOUNTINFO_SUCCESS, accountBeneficiary } }
+    function failure(error) { return { type: userConstants.GET_ACCOUNTINFO_FAILURE, error } }
+
+}
+
+
+
+function getBeneficiaryAccounts() {
+    console.log("getBeneficiaryAccounts");
+    return dispatch => {
+        dispatch(request());
+
+        userService.getBeneficiaryAccounts()
+            .then(
+                accountBeneficiarys => dispatch(success(accountBeneficiarys)),
+                error => dispatch(failure(error))
+            );
+    };
+
+    function request() { return { type: userConstants.GET_LISTACCOUNTINFO_REQUEST } }
+    function success(accountBeneficiarys) { return { type: userConstants.GET_LISTACCOUNTINFO_SUCCESS, accountBeneficiarys } }
+    function failure(error) { return { type: userConstants.GET_LISTACCOUNTINFO_FAILURE, error } }
+
 }

@@ -86,7 +86,7 @@ const TransferInfo = ({ value = {} }) => {
     const [charge, setCharge] = useState(1);
 
     const onFinish = values => {
-        console.log('Received values of form: ', values);
+        //console.log('Received values of form: ', values);
     };
 
     const radioStyle = {
@@ -96,15 +96,15 @@ const TransferInfo = ({ value = {} }) => {
     }
 
     const onChangeRadio = e => {
-        console.log("a " + charge);
+        //console.log("a " + charge);
 
         setCharge(e.target.value)
-        console.log(charge);
+        //console.log(charge);
     }
 
     const triggerChange = changedValue => {
-        console.log("changedValue");
-        console.log(changedValue);
+        //console.log("changedValue");
+        //console.log(changedValue);
         if (onChange) {
             onChange({
                 number,
@@ -127,28 +127,28 @@ const TransferInfo = ({ value = {} }) => {
     );
 
     const onChange = value => {
-        console.log('changed', value);
+        //console.log('changed', value);
         // setValue(1)
 
     }
 
     const onBlur = () => {
-        console.log('blur');
+        //console.log('blur');
     }
 
     const onFocus = () => {
-        console.log('focus');
+        //console.log('focus');
     }
 
     const onSearch = (val) => {
-        console.log('search:', val);
+        //console.log('search:', val);
     }
 
     const onNumberChange = e => {
         const newNumber = parseInt(e.target.value || 0, 10);
 
         if (Number.isNaN(number)) {
-            console.log(newNumber);
+            //console.log(newNumber);
             return;
         }
 
@@ -176,22 +176,22 @@ const TransferInfo = ({ value = {} }) => {
 
 
 
-            <Form.Item label="Account Number" className="border-bottom border-light p-3"
-            //    name="accountNumber"
-            // rules={[
-            //     {
-            //         required: true,
-            //         message: 'Please input your phone number!',
-            //     },
-            // ]}
+            {/* <Form.Item label="Account Number" className="border-bottom border-light p-3"
+               name="accountNumber"
+            rules={[
+                {
+                    required: true,
+                    message: 'Please input your phone number!',
+                },
+            ]}
             >
                 <Input
                     type="text"
                     value={value.number || number}
                     onChange={onNumberChange}
                 />
-            </Form.Item>
-            <Form.Item label="Beneficiary" className="border-bottom border-light p-3">
+            </Form.Item> */}
+            {/* <Form.Item label="Beneficiary" className="border-bottom border-light p-3">
                 <Select
                     showSearch
                     placeholder="Select a person"
@@ -208,7 +208,7 @@ const TransferInfo = ({ value = {} }) => {
                     <Option value="lucy">Lucy</Option>
                     <Option value="tom">Tom</Option>
                 </Select>
-            </Form.Item>
+            </Form.Item> */}
 
             {/* <Form.Item label="Money">
                     <InputNumber
@@ -237,7 +237,9 @@ const TransferInfo = ({ value = {} }) => {
                 />
             </Form.Item>
 
-            <Form.Item label="Your note" className="border-bottom border-light p-3">
+            <Form.Item label="Your note"
+                className="border-bottom border-light p-3"
+                name="description">
                 <TextArea
                     placeholder="Autosize height with minimum and maximum number of lines"
                     autoSize={{ minRows: 2, maxRows: 6 }}
@@ -263,7 +265,7 @@ const TransferInfo = ({ value = {} }) => {
                     </Select>
                 </Form.Item> */}
 
-            <Form.Item onChange={onChangeRadio} label="Charges *" className="border-bottom border-light p-3">
+            <Form.Item onChange={onChangeRadio} label="Charges *" className="border-bottom border-light p-3" name="changes">
                 <Radio.Group value={charge}>
                     <Radio style={radioStyle} value={1}>
                         All charges to my account
@@ -277,7 +279,7 @@ const TransferInfo = ({ value = {} }) => {
 
             <Form.Item {...tailFormItemLayout}>
                 <Button type="primary" htmlType="submit">
-                    Register
+                    Accept Tranfer
         </Button>
             </Form.Item>
         </Form>

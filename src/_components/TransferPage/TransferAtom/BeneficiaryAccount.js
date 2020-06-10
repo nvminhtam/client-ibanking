@@ -3,14 +3,12 @@ import { Form, AutoComplete, Input, Button, Select } from 'antd';
 import { UserOutlined } from '@ant-design/icons';
 import { Collapse } from 'antd';
 import { CaretRightOutlined } from '@ant-design/icons';
+import { connect } from 'react-redux';
+import { userActions } from '../../../_actions/user.actions';
+
 
 const { Panel } = Collapse;
 
-const text = `
-  A dog is a type of domesticated animal.
-  Known for its loyalty and faithfulness,
-  it can be found as a welcome guest in many households across the world.
-`;
 
 const { Option } = Select;
 const layout = {
@@ -21,21 +19,13 @@ const tailLayout = {
     wrapperCol: { offset: 8, span: 16 },
 };
 
-//begin 
-const renderTitle = title => (
-    <span>
-        {title}
-        <a
-            style={{
-                float: 'right',
-            }}
-            href="https://www.google.com/search?q=antd"
-            target="_blank"
-            rel="noopener noreferrer"
-        >
-            more
-      </a>
-    </span>
+
+
+const accountInfo = (info = {}) => (
+    <div>
+        <p><b>Beneficiary's Name: </b> {info.fullname}</p>
+        <p><b>Account Number    : </b>{info.account_number}</p>
+    </div>
 );
 
 const renderItem = (title, count) => ({
@@ -55,26 +45,60 @@ const renderItem = (title, count) => ({
     ),
 });
 
-const options = [
+const options = (values = []) => [
     {
-        label: renderTitle('Libraries'),
-        options: [renderItem('AntDesign', 10000), renderItem('AntDesign UI', 10600)],
+        //  ((acc, i) => <Option value={acc.account_number} key={i}>{acc.account_number}</Option>)
+        // label: renderTitle('Libraries'),;
+        options: values.map((value, i) => renderItem(value.beneficiary_account, value.beneficiary_name)),
     },
-    {
-        label: renderTitle('Solutions'),
-        options: [renderItem('AntDesign UI FAQ', 60100), renderItem('AntDesign FAQ', 30010)],
-    },
-    {
-        label: renderTitle('Articles'),
-        options: [renderItem('AntDesign design language', 100000)],
-    },
+    
+    // {
+    //     // label: renderTitle('Solutions'),
+    //     options: [renderItem('AntDesign UI FAQ', 60100), renderItem('AntDesign FAQ', 30010)],
+    // },
+    // {
+    //     label: renderTitle('Articles'),
+    //     options: [renderItem('AntDesign design language', 100000)],
+    // },
 ];
 
+
+const accounts = (account = []) => (
+    account.map((acc, i) => <Option value={acc.account_number} key={i}>{acc.account_number}</Option>)
+)
+
 //end
-class BeneficiaryAccount extends Component {
+//---------------------------------------------------//
+
+
+class Beneficiary extends Component {
+    constructor(props) {
+        super(props);
+        this.state = {
+
+        }
+    }
+
+    componentDidMount() {
+        const { getAccount, getListBeneficiaryAccount } = this.props
+        getAccount();
+        getListBeneficiaryAccount();
+    }
+
+
     render() {
         const onFinish = values => {
             console.log('Success:', values);
+
+            const { getBeneficiaryAccount } = this.props
+            getBeneficiaryAccount({ account_number: values.BeneficiaryAccount });
+            const { accountBeneficiary, listAccountBeneficiary } = this.props
+            this.setState({
+                accountOwner: values.ownerAccount,
+                accountBeneficiary,
+                listAccountBeneficiary
+            })
+            console.log(this.state)
         };
 
         const onFinishFailed = errorInfo => {
@@ -82,15 +106,10 @@ class BeneficiaryAccount extends Component {
         };
 
 
-        const onChange = value => {
-            console.log('changed', value);
-            // setValue(1)
-
-        }
+        const { accountOwner, accountBeneficiary, listAccountBeneficiary } = this.props
 
         return (
             <div>
-
                 <Form
                     {...layout}
                     name="basic"
@@ -98,21 +117,25 @@ class BeneficiaryAccount extends Component {
                     onFinish={onFinish}
                     onFinishFailed={onFinishFailed}
                 >
-                    <Form.Item label="Your account" className="border-bottom border-light p-3">
+                    <Form.Item label="Your account" className="border-bottom border-light p-3"
+                        name="ownerAccount">
                         <Select
-                            placeholder="Select a person"
-                            onChange={onChange}
+                            placeholder="Select your account"
                         >
-                            <Option value="jack">Jack</Option>
+                            {/* <Option value="jack">Jack</Option>
                             <Option value="lucy">Lucy</Option>
-                            <Option value="tom">Tom</Option>
+                            <Option value="tom">Tom</Option> */}
+                            {/* {
+                                account.map((acc, i) => <Option value={acc.account_number} key={i}>{acc.customer_username}</Option>)
+                            } */}
+                            {accounts(accountOwner)}
                         </Select>
                     </Form.Item>
-                    <Form.Item label="Beneficiary" className="border-bottom border-light p-3">
+                    <Form.Item label="Beneficiary" className="border-bottom border-light p-3"
+                        name="BeneficiaryAccount">
                         <AutoComplete
                             dropdownClassName="certain-category-search-dropdown"
-
-                            options={options}
+                            options={options(listAccountBeneficiary)}
                         >
                             <Input.Search size="large" placeholder="input here" />
                         </AutoComplete>
@@ -120,7 +143,7 @@ class BeneficiaryAccount extends Component {
 
                     <Form.Item {...tailLayout}>
                         <Button type="primary" htmlType="submit">
-                            Submit
+                            Access Beneficiary
                 </Button>
                     </Form.Item>
 
@@ -129,17 +152,34 @@ class BeneficiaryAccount extends Component {
                 {/* --------------------------- */}
                 <Collapse
                     bordered={false}
-                    defaultActiveKey={['0']}
                     expandIcon={({ isActive }) => <CaretRightOutlined rotate={isActive ? 90 : 0} />}
                     className="site-collapse-custom-collapse bg-light"
                 >
-                    <Panel header="Beneficiary Information" key="1" className="site-collapse-custom-panel">
-                        <p>{text}</p>
+                    <Panel header="Beneficiary's Information" key="1" className="site-collapse-custom-panel">
+                        {accountInfo(accountBeneficiary)}
                     </Panel>
                 </Collapse>
             </div>
         )
     }
 }
+
+
+function mapStateToProps(state) {
+    return {
+        accountOwner: state.users.accountOwner,
+        accountBeneficiary: state.users.accountBeneficiary,
+        listAccountBeneficiary: state.users.accountBeneficiarys
+    };
+}
+
+const mapDispatchToProps = (dispatch) => ({
+    getAccount: () => dispatch(userActions.getAccount()),
+    getBeneficiaryAccount: (accNumber) => dispatch(userActions.getBeneficiaryAccount(accNumber)),
+    getListBeneficiaryAccount: () => dispatch(userActions.getBeneficiaryAccounts()),
+});
+
+
+const BeneficiaryAccount = connect(mapStateToProps, mapDispatchToProps)(Beneficiary);
 
 export { BeneficiaryAccount }
