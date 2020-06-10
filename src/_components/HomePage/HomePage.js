@@ -16,6 +16,8 @@ import {
 } from '@ant-design/icons';
 
 import { TransferPage } from '../TransferPage'
+import  {Contacts}  from './Contacts/Contacts';
+import EditableTable from './Contacts/edit';
 
 const { SubMenu } = Menu;
 
@@ -42,11 +44,11 @@ const comp = [
     },
     {
         title: "Danh sách nợ",
-        content: "Page 3",
+        content: <EditableTable/>,
     },
     {
         content: "Danh sách người nhận",
-        content: "Page 3",
+        content: <Contacts/>,
     },
     {
         title: "option 11",
@@ -131,6 +133,7 @@ class HomePage extends React.Component {
                 <div className="col-9 p-5">
                     {comp[this.state.key].title}
                     {comp[this.state.key].content}
+                    
 
                 </div>
             </div>
