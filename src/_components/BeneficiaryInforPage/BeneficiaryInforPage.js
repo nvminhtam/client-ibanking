@@ -253,9 +253,6 @@ class BeneficiaryInforPage extends React.Component {
                     Add a beneficiary
                         </Button>
                 <div>
-                    {/* <Button type="primary" onClick={this.handleAdd()}>
-                        Open Modal
-        </Button> */}
                     <Modal
                         title="Basic Modal"
                         visible={this.state.visible}
