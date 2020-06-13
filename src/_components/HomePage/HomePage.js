@@ -17,6 +17,8 @@ import {
 
 import { TransferPage } from '../TransferPage'
 import { MyAccountPage } from '../MyAccountPage/MyAccountPage'
+import { BeneficiaryInforPage } from '../BeneficiaryInforPage/BeneficiaryInforPage'
+
 const { SubMenu } = Menu;
 
 const comp = [
@@ -26,7 +28,7 @@ const comp = [
     },
     {
         title: "Thong tin",
-        content: "page 2",
+        content: <BeneficiaryInforPage />,
     },
     {
         title: "Thẻ",
@@ -60,7 +62,7 @@ class HomePage extends React.Component {
         super(props)
         this.state = {
             collapsed: false,
-            key: "0"
+            key: "1"
         }
     }
     componentDidMount() {

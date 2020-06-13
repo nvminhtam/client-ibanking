@@ -7,8 +7,9 @@ export function authHeader() {
         JSON.parse(localStorage.getItem("user")) &&
         JSON.parse(localStorage.getItem("user"))["accessToken"];
     if (jwt_decode(token).exp < Date.now() / 1000) {
-        console.log(Date.now());
-        localStorage.clear();
+        // localStorage.clear();
+        localStorage.removeItem(user);
+        // localStorage.setItem('')
         return {}
     }
 

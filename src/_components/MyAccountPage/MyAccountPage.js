@@ -7,7 +7,7 @@ const accountsInfor = (accountOwner = []) => (
         <div key={i} className="container ml-5">
             <div><b>So tai khoan:</b>  {acc.account_number}</div>
             <div><b>So du hien tai:</b> {acc.account_balance} VND</div>
-            <div><b>Loai tai khoan:</b> {acc.type.data === 1 ? <span>Thanh toan</span> : <span>Tiet kiem</span>}</div>
+            <div><b>Loai tai khoan:</b> {acc.type === 1 ? <span>Thanh toan</span> : <span>Tiet kiem</span>}</div>
             <br />
         </div>
     )

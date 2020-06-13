@@ -16,7 +16,8 @@ class LoginPage extends React.Component {
             username: '',
             password: '',
             submitted: false,
-            verified: false
+            //verified: false
+            verified: true
         };
 
         this.handleChange = this.handleChange.bind(this);
