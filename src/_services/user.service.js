@@ -10,6 +10,7 @@ export const userService = {
     getAccount,
     getBeneficiaryAccount,
     getBeneficiaryAccounts,
+    updateListBeneficiaryInfo,
     delete: _delete
 };
 
@@ -70,8 +71,15 @@ function getBeneficiaryAccount(accountInfo) {
         body: JSON.stringify(accountInfo)
     };
     return fetch(config.apiUrl + '/api/account/', requestOptions).then(handleResponse, handleError);
+}
 
-
+function updateListBeneficiaryInfo(listInfo) {
+    const requestOptions = {
+        method: 'POST',
+        headers: { ...authHeader(), 'Content-Type': 'application/json' },
+        body: JSON.stringify(listInfo)
+    };
+    return fetch(config.apiUrl + '/api/customer/update-beneficiary/', requestOptions).then(handleResponse, handleError);
 }
 
 function getBeneficiaryAccounts() {
@@ -80,8 +88,6 @@ function getBeneficiaryAccounts() {
         headers: { ...authHeader() },
     };
     return fetch(config.apiUrl + '/api/customer/beneficiaries', requestOptions).then(handleResponse, handleError);
-
-
 }
 
 function register(user) {

@@ -69,6 +69,22 @@ export function users(state = {}, action) {
         error: action.error
       };
 
+    case userConstants.UPDATE_LISTBENEFICIARYINFO_REQUEST:
+      return {
+        ...state,
+        loading: true
+      };
+    case userConstants.UPDATE_LISTBENEFICIARYINFO_SUCCESS:
+      return {
+        ...state,
+        success: action.success || {}
+      };
+    case userConstants.UPDATE_LISTBENEFICIARYINFO_FAILURE:
+      return {
+        ...state,
+        error: action.error
+      };
+
     case userConstants.DELETE_REQUEST:
       // add 'deleting:true' property to user being deleted
       return {

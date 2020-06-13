@@ -105,7 +105,7 @@ class BeneficiaryInforPage extends React.Component {
                 dataIndex: 'operation',
                 render: (text, record) =>
                     this.state.listAccountBeneficiary.length >= 1 ? (
-                        <Popconfirm title="Sure to delete?" onConfirm={() => this.handleDelete(record.key)}>
+                        <Popconfirm title="Sure to delete?" onConfirm={() => this.handleDelete(record)}>
                             <a>Delete</a>
                         </Popconfirm>
                     ) : null,
@@ -113,20 +113,9 @@ class BeneficiaryInforPage extends React.Component {
         ];
 
         this.state = {
-            listAccountBeneficiary: [
-                {
-                    key: 0,
-                    beneficiary_name: "a",
-                    beneficiary_account: 0
-                },
-                {
-                    key: 1,
-                    beneficiary_name: "b",
-                    beneficiary_account: 1
-                }
-            ],
+            listAccountBeneficiary: [],
             isloaded: false,
-            count: 4,
+            count: 0,
             visible: false
         };
 
@@ -165,26 +154,16 @@ class BeneficiaryInforPage extends React.Component {
             ? {
                 ...prevState,
                 listAccountBeneficiary: nextProps.listAccountBeneficiary,
-                isloaded: true
+                isloaded: true,
+                count: nextProps.listAccountBeneficiary.length + 1
             }
             : {
                 ...prevState
             }
     }
-    handleDelete(key) {
-        const listAccountBeneficiary = [...this.state.listAccountBeneficiary];
-        let deletedRow = listAccountBeneficiary.filter(item => item.key === key)
-        // deletedRow = { ...deletedRow, type: 2 }
-        this.setState({
-            listAccountBeneficiary: {
-                ...listAccountBeneficiary.filter(item => item.key !== key)
+    handleDelete(row) {
 
-            },
-        });
-    };
-
-    handleSave(row) {
-        const newRow = { ...row, type: 1 }
+        const newRow = { ...row, type: "del" }
         const newData = [...this.state.listAccountBeneficiary];
         const index = newData.findIndex(item => newRow.key === item.key);
         const item = newData[index];
@@ -194,24 +173,17 @@ class BeneficiaryInforPage extends React.Component {
         });
     };
 
-    handleAdd() {
+    handleSave(row) {
+        const newRow = { ...row, type: "update" }
+        const newData = [...this.state.listAccountBeneficiary];
+        const index = newData.findIndex(item => newRow.key === item.key);
+        const item = newData[index];
+        newData.splice(index, 1, { ...item, ...newRow });
         this.setState({
-            visible: true,
+            listAccountBeneficiary: newData,
         });
-        const { count, listAccountBeneficiary } = this.state;
-        const newData = {
-            key: count,
-            beneficiary_name: `Edward King ${count}`,
-            beneficiary_account: 32,
-            type: 2
-        };
-
-        this.setState({
-            listAccountBeneficiary: [...listAccountBeneficiary, newData],
-            count: count + 1,
-        });
-
     };
+
 
     render() {
 
@@ -241,10 +213,38 @@ class BeneficiaryInforPage extends React.Component {
                 }),
             };
         });
+
+        const onFinish = values => {
+            console.log('Success:', values);
+            const { getBeneficiaryAccount } = this.props
+            getBeneficiaryAccount({ account_number: values.accountnumber })
+            console.log(this.props.accountBeneficiary)
+
+            const { count, listAccountBeneficiary } = this.state;
+            const newData = {
+                key: count,
+                beneficiary_name: values.remindname || "Click here to change name",
+                beneficiary_account: values.accountnumber,
+                type: "add"
+            };
+
+            this.setState({
+                listAccountBeneficiary: [...listAccountBeneficiary, newData],
+                count: count + 1,
+                visible: false
+            });
+
+        };
+
+        const onFinishFailed = errorInfo => {
+            console.log('Failed:', errorInfo);
+        };
+
+        console.log(this.props.accountBeneficiary);
         return (
             <div>
                 <Button
-                    onClick={() => this.handleAdd()}
+                    onClick={() => this.setState({ visible: true })}
                     type="primary"
                     style={{
                         marginBottom: 16,
@@ -262,35 +262,60 @@ class BeneficiaryInforPage extends React.Component {
                         onOk={() => this.setState({ visible: false })}
                         onCancel={() => this.setState({ visible: false })}
                     >
-                        <p>Some contents...</p>
-                        <p>Some contents...</p>
-                        <p>Some contents...</p>
+                        <Form
+                            name="basic"
+                            initialValues={{ remember: true }}
+                            onFinish={onFinish}
+                            onFinishFailed={onFinishFailed}
+                        >
+                            <Form.Item
+                                name="remindname"
+                            // rules={[{ required: true, message: 'Please input beneficiary name!' }]}
+                            >
+                                <Input placeholder="Remind Name" />
+                            </Form.Item>
+
+                            <Form.Item
+                                name="accountnumber"
+                                rules={[{ required: true, message: 'Please input beneficiary account number!' }]}
+                            >
+                                <Input placeholder="beneficiary account number" />
+                            </Form.Item>
+
+                            <Form.Item >
+                                <Button type="primary" htmlType="submit">
+                                    Submit
+        </Button>
+                            </Form.Item>
+                        </Form>
                     </Modal>
                 </div>
                 <Table
                     components={components}
                     rowClassName={() => 'editable-row'}
                     bordered
-                    dataSource={listAccountBeneficiary}
+                    dataSource={listAccountBeneficiary.filter(item => item.type !== "del")}
                     columns={columns}
                 />
+                <Button type="primary" className="float-right" onClick={() => this.props.updateListBeneficiaryInfo(this.state.listAccountBeneficiary)}>Save Changes</Button>
             </div>
         );
     }
-
-
-
 }
 
 
 function mapStateToProps(state) {
     return {
-        listAccountBeneficiary: state.users.accountBeneficiarys
+        listAccountBeneficiary: state.users.accountBeneficiarys,
+        accountBeneficiary: state.users.accountBeneficiary,
+        success: state.users.success
     };
 }
 
 const mapDispatchToProps = (dispatch) => ({
     getListBeneficiaryAccount: () => dispatch(userActions.getBeneficiaryAccounts()),
+    getBeneficiaryAccount: (accountnumber) => dispatch(userActions.getBeneficiaryAccount(accountnumber)),
+    updateListBeneficiaryInfo: (listInfor) => dispatch(userActions.updateListBeneficiaryInfo(listInfor))
 });
 
 

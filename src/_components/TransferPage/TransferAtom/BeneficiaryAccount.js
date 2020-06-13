@@ -51,7 +51,7 @@ const options = (values = []) => [
         // label: renderTitle('Libraries'),;
         options: values.map((value, i) => renderItem(value.beneficiary_account, value.beneficiary_name)),
     },
-    
+
     // {
     //     // label: renderTitle('Solutions'),
     //     options: [renderItem('AntDesign UI FAQ', 60100), renderItem('AntDesign FAQ', 30010)],
