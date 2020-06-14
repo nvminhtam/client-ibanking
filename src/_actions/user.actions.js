@@ -12,6 +12,7 @@ export const userActions = {
     getBeneficiaryAccount,
     getBeneficiaryAccounts,
     updateListBeneficiaryInfo,
+    addBeneficiary,
     delete: _delete
 };
 
@@ -143,13 +144,13 @@ function updateListBeneficiaryInfo(listInfo) {
 
         userService.updateListBeneficiaryInfo(listInfo)
             .then(
-                success => dispatch(success(success)),
+                successMsg => dispatch(success(successMsg)),
                 error => dispatch(failure(error))
             );
     };
 
     function request() { return { type: userConstants.UPDATE_LISTBENEFICIARYINFO_REQUEST } }
-    function success(success) { return { type: userConstants.UPDATE_LISTBENEFICIARYINFO_SUCCESS, success } }
+    function success(successMsg) { return { type: userConstants.UPDATE_LISTBENEFICIARYINFO_SUCCESS, successMsg } }
     function failure(error) { return { type: userConstants.UPDATE_LISTBENEFICIARYINFO_FAILURE, error } }
 
 }
@@ -168,5 +169,22 @@ function getBeneficiaryAccounts() {
     function request() { return { type: userConstants.GET_LISTACCOUNTINFO_REQUEST } }
     function success(accountBeneficiarys) { return { type: userConstants.GET_LISTACCOUNTINFO_SUCCESS, accountBeneficiarys } }
     function failure(error) { return { type: userConstants.GET_LISTACCOUNTINFO_FAILURE, error } }
+
+}
+
+function addBeneficiary(beneficiaryInfor) {
+    return dispatch => {
+        dispatch(request());
+
+        userService.addBeneficiary(beneficiaryInfor)
+            .then(
+                accountBeneficiary => dispatch(success(accountBeneficiary)),
+                error => dispatch(failure(error))
+            );
+    };
+
+    function request() { return { type: userConstants.ADD_BENEFICIARY_REQUEST } }
+    function success(accountBeneficiary) { return { type: userConstants.ADD_BENEFICIARY_SUCCESS, accountBeneficiary } }
+    function failure(error) { return { type: userConstants.ADD_BENEFICIARY_FAILURE, error } }
 
 }

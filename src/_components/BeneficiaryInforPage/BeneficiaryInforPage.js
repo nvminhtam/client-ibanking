@@ -1,5 +1,6 @@
 import React, { useContext, useState, useEffect, useRef } from 'react';
 import { Table, Input, Button, Popconfirm, Form, Modal } from 'antd';
+import { DeleteOutlined } from '@ant-design/icons'
 import { connect } from 'react-redux';
 import { userActions } from '../../_actions/user.actions';
 
@@ -106,7 +107,7 @@ class BeneficiaryInforPage extends React.Component {
                 render: (text, record) =>
                     this.state.listAccountBeneficiary.length >= 1 ? (
                         <Popconfirm title="Sure to delete?" onConfirm={() => this.handleDelete(record)}>
-                            <a>Delete</a>
+                            <a className="text-danger"><DeleteOutlined /> Delete  </a>
                         </Popconfirm>
                     ) : null,
             },
@@ -187,10 +188,7 @@ class BeneficiaryInforPage extends React.Component {
 
     render() {
 
-        // const { listAccountBeneficiary } = this.props
-
         const { listAccountBeneficiary } = this.state;
-        console.log(this.state);
         const components = {
             body: {
                 row: EditableRow,
@@ -215,32 +213,35 @@ class BeneficiaryInforPage extends React.Component {
         });
 
         const onFinish = values => {
-            console.log('Success:', values);
-            const { getBeneficiaryAccount } = this.props
-            getBeneficiaryAccount({ account_number: values.accountnumber })
-            console.log(this.props.accountBeneficiary)
-
-            const { count, listAccountBeneficiary } = this.state;
-            const newData = {
-                key: count,
-                beneficiary_name: values.remindname || "Click here to change name",
+            const { addBeneficiary } = this.props
+            addBeneficiary({
                 beneficiary_account: values.accountnumber,
-                type: "add"
-            };
+                name: values.remindname || ''
+            })
 
-            this.setState({
-                listAccountBeneficiary: [...listAccountBeneficiary, newData],
-                count: count + 1,
-                visible: false
-            });
+            if (!this.props.addError === undefined) {
+                const { count, listAccountBeneficiary } = this.state;
+                const newData = {
+                    key: count,
+                    beneficiary_name: values.remindname || "Click here to change name",
+                    beneficiary_account: values.accountnumber,
+                    type: "add"
+                };
 
+                this.setState({
+                    listAccountBeneficiary: [...listAccountBeneficiary, newData],
+                    count: count + 1,
+                    visible: false
+                });
+            }
         };
 
         const onFinishFailed = errorInfo => {
             console.log('Failed:', errorInfo);
         };
 
-        console.log(this.props.accountBeneficiary);
+        // console.log(this.state.listAccountBeneficiary)
+
         return (
             <div>
                 <Button
@@ -259,6 +260,7 @@ class BeneficiaryInforPage extends React.Component {
                         onOk={() => this.setState({ visible: false })}
                         onCancel={() => this.setState({ visible: false })}
                     >
+                        {this.props.addError && <div className="text-danger">{this.props.addError}</div>}
                         <Form
                             name="basic"
                             initialValues={{ remember: true }}
@@ -304,14 +306,16 @@ class BeneficiaryInforPage extends React.Component {
 function mapStateToProps(state) {
     return {
         listAccountBeneficiary: state.users.accountBeneficiarys,
-        accountBeneficiary: state.users.accountBeneficiary,
-        success: state.users.success
+        beneficiaryAccount: state.users.beneficiaryAccount,
+        success: state.users.success,
+        addError: state.users.addError
     };
 }
 
 const mapDispatchToProps = (dispatch) => ({
     getListBeneficiaryAccount: () => dispatch(userActions.getBeneficiaryAccounts()),
-    getBeneficiaryAccount: (accountnumber) => dispatch(userActions.getBeneficiaryAccount(accountnumber)),
+    // getBeneficiaryAccount: (accountnumber) => dispatch(userActions.getBeneficiaryAccount(accountnumber)),
+    addBeneficiary: (beneficiaryInfo) => dispatch(userActions.addBeneficiary(beneficiaryInfo)),
     updateListBeneficiaryInfo: (listInfor) => dispatch(userActions.updateListBeneficiaryInfo(listInfor))
 });
 

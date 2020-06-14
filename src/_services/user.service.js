@@ -11,6 +11,7 @@ export const userService = {
     getBeneficiaryAccount,
     getBeneficiaryAccounts,
     updateListBeneficiaryInfo,
+    addBeneficiary,
     delete: _delete
 };
 
@@ -72,6 +73,16 @@ function getBeneficiaryAccount(accountInfo) {
     };
     return fetch(config.apiUrl + '/api/account/', requestOptions).then(handleResponse, handleError);
 }
+
+function addBeneficiary(beneficiaryInfor) {
+    const requestOptions = {
+        method: 'POST',
+        headers: { ...authHeader(), 'Content-Type': 'application/json' },
+        body: JSON.stringify(beneficiaryInfor)
+    };
+    return fetch(config.apiUrl + '/api/customer/add-beneficiary', requestOptions).then(handleResponse, handleError);
+}
+
 
 function updateListBeneficiaryInfo(listInfo) {
     const requestOptions = {
