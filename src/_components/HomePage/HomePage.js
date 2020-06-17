@@ -3,7 +3,7 @@ import { Link } from 'react-router-dom';
 import { connect } from 'react-redux';
 import { userActions } from '../../_actions';
 
-import { Menu, Button } from 'antd';
+import { Menu, Button, Modal, Space } from 'antd';
 import {
     AppstoreOutlined,
     MenuUnfoldOutlined,
@@ -19,10 +19,11 @@ import { TransferPage } from '../TransferPage'
 import { MyAccountPage } from '../MyAccountPage/MyAccountPage'
 import { BeneficiaryInforPage } from '../BeneficiaryInforPage/BeneficiaryInforPage'
 import { CreateDebtPage } from '../DebtManagementPage/CreateDebtPage'
-
+import { ChangePasswordPage } from '../ChangePasswordPage/ChangePasswordPage'
 import { TransferInterBankPage } from '../TransferPage'
 
 const { SubMenu } = Menu;
+
 
 const comp = [
     {
@@ -54,8 +55,8 @@ const comp = [
         content: "Page 3",
     },
     {
-        title: "option 11",
-        content: "Page 3",
+        title: "change password",
+        content: <ChangePasswordPage />,
     },
 ];
 
@@ -101,9 +102,9 @@ class HomePage extends React.Component {
             <div className="row" >
                 <div className="col-2" style={{ backgroundColor: '#000c17' }}>
                     <div  >
-                        <Button type="primary" onClick={toggleCollapsed} >
+                        {/* <Button type="primary" onClick={toggleCollapsed} >
                             {React.createElement(this.state.collapsed ? MenuUnfoldOutlined : MenuFoldOutlined)}
-                        </Button>
+                        </Button> */}
                         <Menu
                             defaultSelectedKeys={['0']}
                             defaultOpenKeys={['sub1', 'sub2', 'sub3']}
@@ -129,7 +130,7 @@ class HomePage extends React.Component {
                                 <Menu.Item key="5">Danh sách nợ</Menu.Item>
                                 <Menu.Item key="6">Danh sách người nhận</Menu.Item>
                                 <SubMenu key="sub3" title="Submenu">
-                                    <Menu.Item key="7">Option 11</Menu.Item>
+                                    <Menu.Item key="7">Change Password</Menu.Item>
                                     <Menu.Item ><LogoutOutlined /> <Link to="/login">Logout</Link></Menu.Item>
                                 </SubMenu>
                             </SubMenu>
