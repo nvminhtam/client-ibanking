@@ -3,7 +3,7 @@ import { Link } from 'react-router-dom';
 import { connect } from 'react-redux';
 import { userActions } from '../../_actions';
 
-import { Menu, Button } from 'antd';
+import { Menu, Button, Modal, Space } from 'antd';
 import {
     AppstoreOutlined,
     MenuUnfoldOutlined,
@@ -20,10 +20,11 @@ import { MyAccountPage } from '../MyAccountPage/MyAccountPage'
 import { BeneficiaryInforPage } from '../BeneficiaryInforPage/BeneficiaryInforPage'
 import {TransactionsTransferPage} from '../TransactionsHistoryPage/TransactionsTransfer/TransactionsTransferPage'
 import { CreateDebtPage } from '../DebtManagementPage/CreateDebtPage'
-
+import { ChangePasswordPage } from '../ChangePasswordPage/ChangePasswordPage'
 import { TransferInterBankPage } from '../TransferPage'
 
 const { SubMenu } = Menu;
+
 
 const comp = [
     {
@@ -55,8 +56,8 @@ const comp = [
         content: "Page 3",
     },
     {
-        title: "Tài khoản",
-        content: "<ChangePasswordPage/>",
+        title: "change password",
+        content: <ChangePasswordPage />,
     },
 ];
 
@@ -101,9 +102,9 @@ class HomePage extends React.Component {
             <div className="row" >
                 <div className="col-2" style={{ backgroundColor: '#000c17' }}>
                     <div  >
-                        <Button type="primary" onClick={toggleCollapsed} >
+                        {/* <Button type="primary" onClick={toggleCollapsed} >
                             {React.createElement(this.state.collapsed ? MenuUnfoldOutlined : MenuFoldOutlined)}
-                        </Button>
+                        </Button> */}
                         <Menu
                             defaultSelectedKeys={['0']}
                             defaultOpenKeys={['sub1', 'sub2', 'sub3']}
