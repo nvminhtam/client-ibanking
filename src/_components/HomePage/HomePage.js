@@ -18,6 +18,7 @@ import {
 import { TransferPage } from '../TransferPage'
 import { MyAccountPage } from '../MyAccountPage/MyAccountPage'
 import { BeneficiaryInforPage } from '../BeneficiaryInforPage/BeneficiaryInforPage'
+import { CreateDebtPage } from '../DebtManagementPage/CreateDebtPage'
 
 const { SubMenu } = Menu;
 
@@ -44,7 +45,7 @@ const comp = [
     },
     {
         title: "Danh sách nợ",
-        content: "Page 3",
+        content: <CreateDebtPage />,
     },
     {
         content: "Danh sách người nhận",
@@ -62,12 +63,13 @@ class HomePage extends React.Component {
         super(props)
         this.state = {
             collapsed: false,
-            key: "1"
+            key: "3"
         }
     }
     componentDidMount() {
-        const { userActions } = this.props
-        userActions();
+        this.props.userActions();
+        this.props.getListBeneficiaryAccount();
+        this.props.getAccount();
         // let user = JSON.parse(localStorage.getItem('user'));
     }
 
@@ -90,6 +92,9 @@ class HomePage extends React.Component {
                 key: e.key,
             });
         };
+
+        // console.log("user");
+        // console.log(this.props.users);
         return (
             <div className="row" >
                 <div className="col-2" style={{ backgroundColor: '#000c17' }}>
@@ -131,6 +136,7 @@ class HomePage extends React.Component {
                 </div>
                 <div className="col-9 p-5"> <h2> {comp[this.state.key].title}</h2>
                     {users.error && <span className="text-danger">ERROR: {users.error}</span>}
+                    {users.success && <span className="text-success">SUCCESS: {users.success}</span>}
                     {comp[this.state.key].content}
 
                 </div>
@@ -152,6 +158,7 @@ function mapStateToProps(state) {
 const mapDispatchToProps = (dispatch) => ({
     userActions: () => dispatch(userActions.getAll()),
     getAccount: () => dispatch(userActions.getAccount()),
+    getListBeneficiaryAccount: () => dispatch(userActions.getBeneficiaryAccounts()),
 });
 
 const connectedHomePage = connect(mapStateToProps, mapDispatchToProps)(HomePage);

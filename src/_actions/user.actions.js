@@ -13,6 +13,7 @@ export const userActions = {
     getBeneficiaryAccounts,
     updateListBeneficiaryInfo,
     addBeneficiary,
+    transferIntrabank,
     delete: _delete
 };
 
@@ -186,5 +187,23 @@ function addBeneficiary(beneficiaryInfor) {
     function request() { return { type: userConstants.ADD_BENEFICIARY_REQUEST } }
     function success(accountBeneficiary) { return { type: userConstants.ADD_BENEFICIARY_SUCCESS, accountBeneficiary } }
     function failure(error) { return { type: userConstants.ADD_BENEFICIARY_FAILURE, error } }
+
+}
+
+
+function transferIntrabank(transferInfor) {
+    return dispatch => {
+        dispatch(request());
+
+        userService.transferIntrabank(transferInfor)
+            .then(
+                transferInforSuccess => dispatch(success(transferInforSuccess)),
+                error => dispatch(failure(error))
+            );
+    };
+
+    function request() { return { type: userConstants.TRANSFER_INTRABANK_REQUEST } }
+    function success(transferInforSuccess) { return { type: userConstants.TRANSFER_INTRABANK_SUCCESS, transferInforSuccess } }
+    function failure(error) { return { type: userConstants.TRANSFER_INTRABANK_FAILURE, error } }
 
 }

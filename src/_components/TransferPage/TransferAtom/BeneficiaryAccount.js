@@ -1,5 +1,5 @@
 import React, { Component } from 'react'
-import { Form, AutoComplete, Input, Button, Select } from 'antd';
+import { Form, AutoComplete, Input, Button, Select, Checkbox } from 'antd';
 import { UserOutlined } from '@ant-design/icons';
 import { Collapse } from 'antd';
 import { CaretRightOutlined } from '@ant-design/icons';
@@ -22,9 +22,9 @@ const tailLayout = {
 
 
 const accountInfo = (info = {}) => (
-    <div>
-        <p><b>Beneficiary's Name: </b> {info.fullname}</p>
-        <p><b>Account Number    : </b>{info.account_number}</p>
+    <div >
+        <p><b>Beneficiary's Name:</b> {info.beneficiary_name}</p>
+        <p><b>Account Number    : </b>{info.beneficiary_account}</p>
     </div>
 );
 
@@ -47,19 +47,8 @@ const renderItem = (title, count) => ({
 
 const options = (values = []) => [
     {
-        //  ((acc, i) => <Option value={acc.account_number} key={i}>{acc.account_number}</Option>)
-        // label: renderTitle('Libraries'),;
         options: values.map((value, i) => renderItem(value.beneficiary_account, value.beneficiary_name)),
     },
-
-    // {
-    //     // label: renderTitle('Solutions'),
-    //     options: [renderItem('AntDesign UI FAQ', 60100), renderItem('AntDesign FAQ', 30010)],
-    // },
-    // {
-    //     label: renderTitle('Articles'),
-    //     options: [renderItem('AntDesign design language', 100000)],
-    // },
 ];
 
 
@@ -75,90 +64,154 @@ class Beneficiary extends Component {
     constructor(props) {
         super(props);
         this.state = {
-
+            isSaveBeneficiary: true,
+            isDisable: true,
+            Collapse: 0,
+            accountBeneficiary: {}
         }
     }
 
     componentDidMount() {
-        const { getAccount, getListBeneficiaryAccount } = this.props
-        getAccount();
-        getListBeneficiaryAccount();
+        // const { getAccount, getListBeneficiaryAccount } = this.props
+        // getAccount();
+        // getListBeneficiaryAccount();
     }
 
+    searchInfor(value) {
+        if (value === "" || value === undefined || value === null) return
+
+        this.props.users.accountBeneficiarys.forEach(acc => {
+            if (acc.beneficiary_account === value) {
+                console.log(value)
+                return
+            }
+        });
+        console.log("object")
+        const { getBeneficiaryAccount } = this.props
+        getBeneficiaryAccount({ account_number: value });
+
+        this.setState({
+            accountBeneficiary: {
+                ...this.props.accountBeneficiary
+            },
+            Collapse: "1",
+            isDisable: false
+        })
+    }
+
+    onSelect(value) {
+        // const value = e.target.value
+        this.props.listAccountBeneficiary.forEach(acc => {
+            if (acc.beneficiary_account === value) {
+                this.setState({
+                    accountBeneficiary: { ...acc },
+                    Collapse: "1",
+                    isDisable: true
+                })
+                return
+            }
+        });
+    }
 
     render() {
         const onFinish = values => {
             console.log('Success:', values);
 
-            const { getBeneficiaryAccount } = this.props
-            getBeneficiaryAccount({ account_number: values.BeneficiaryAccount });
-            const { accountBeneficiary, listAccountBeneficiary } = this.props
-            this.setState({
-                accountOwner: values.ownerAccount,
-                accountBeneficiary,
-                listAccountBeneficiary
-            })
-            console.log(this.state)
+            const transferAccountInfo = {
+                ...values
+                // depositors: ownerAccount,
+                // receivers: BeneficiaryAccount
+            }
+            localStorage.setItem("transferAccountInfo", JSON.stringify(transferAccountInfo))
         };
 
         const onFinishFailed = errorInfo => {
             console.log('Failed:', errorInfo);
         };
 
+        const { accountOwner, listAccountBeneficiary } = this.props
+        const { accountBeneficiary } = this.state
 
-        const { accountOwner, accountBeneficiary, listAccountBeneficiary } = this.props
-
+        console.log(this.state.Collapse)
         return (
             <div>
                 <Form
                     {...layout}
                     name="basic"
-                    initialValues={{ remember: true }}
+                    initialValues={{ remember: true, bank: "NKLBank" }}
                     onFinish={onFinish}
                     onFinishFailed={onFinishFailed}
                 >
                     <Form.Item label="Your account" className="border-bottom border-light p-3"
-                        name="ownerAccount">
-                        <Select
+                        name="depositor"
+                        rules={[
+                            {
+                                required: true,
+                                message: 'Please choose your account!',
+                            },
+                        ]}>
+                        <Select autoFocus
                             placeholder="Select your account"
                         >
-                            {/* <Option value="jack">Jack</Option>
-                            <Option value="lucy">Lucy</Option>
-                            <Option value="tom">Tom</Option> */}
-                            {/* {
-                                account.map((acc, i) => <Option value={acc.account_number} key={i}>{acc.customer_username}</Option>)
-                            } */}
                             {accounts(accountOwner)}
                         </Select>
                     </Form.Item>
                     <Form.Item label="Beneficiary" className="border-bottom border-light p-3"
-                        name="BeneficiaryAccount">
+                        name="receiver"
+                        rules={[
+                            {
+                                required: true,
+                                message: 'Please choose beneficiary!',
+                            },
+                        ]}>
                         <AutoComplete
                             dropdownClassName="certain-category-search-dropdown"
                             options={options(listAccountBeneficiary)}
+                            onSelect={(value) => this.onSelect(value)}
+
                         >
-                            <Input.Search size="large" placeholder="input here" />
+                            <Input.Search
+                                size="large"
+                                placeholder="input here"
+                                onSearch={(value) => { this.searchInfor(value) }}
+                            />
                         </AutoComplete>
                     </Form.Item>
+
+                    <Form.Item label="choose bank" className="border-bottom border-light p-3">
+                        <Select
+                        //   onChange={onGenderChange}
+                        // defaultValue="NKLBank"
+                        >
+                            <Option value="NKLBank">NKL Bank</Option>
+                            <Option value="MPBank">MP Bank</Option>
+                            <Option value="Q2Bank">Q2 Bank</Option>
+                        </Select>
+                    </Form.Item>
+
+                    <Form.Item label="Save Beneficiary" className="border-bottom border-light pl-3">
+                        <Checkbox disabled={this.state.isDisable} onChange={() => this.setState({ isSaveBeneficiary: !this.state.isSaveBeneficiary })} checked={this.state.isSaveBeneficiary}> </Checkbox>
+                    </Form.Item>
+                    <Collapse
+                        activeKey={[this.state.Collapse]}
+                        bordered={true}
+                        expandIcon={({ isActive }) => <CaretRightOutlined rotate={isActive ? 90 : 0} />}
+                        className="site-collapse-custom-collapse bg-light mb-4"
+                    >
+                        <Panel header="Beneficiary's Information" key="1" className="site-collapse-custom-panel">
+                            {accountInfo(accountBeneficiary)}
+                        </Panel>
+                    </Collapse>
 
                     <Form.Item {...tailLayout}>
                         <Button type="primary" htmlType="submit">
                             Access Beneficiary
-                </Button>
+                   </Button>
                     </Form.Item>
-
                 </Form>
 
                 {/* --------------------------- */}
-                <Collapse
-                    bordered={false}
-                    expandIcon={({ isActive }) => <CaretRightOutlined rotate={isActive ? 90 : 0} />}
-                    className="site-collapse-custom-collapse bg-light"
-                >
-                    <Panel header="Beneficiary's Information" key="1" className="site-collapse-custom-panel">
-                        {accountInfo(accountBeneficiary)}
-                    </Panel>
-                </Collapse>
+
             </div>
         )
     }
@@ -166,17 +219,21 @@ class Beneficiary extends Component {
 
 
 function mapStateToProps(state) {
+    const users = state.users
     return {
-        accountOwner: state.users.accountOwner,
-        accountBeneficiary: state.users.accountBeneficiary,
-        listAccountBeneficiary: state.users.accountBeneficiarys
+        accountOwner: users.accountOwner,
+        accountBeneficiary: users.accountBeneficiary,
+        listAccountBeneficiary: users.accountBeneficiarys,
+        addError: users.addError,
+
     };
 }
 
 const mapDispatchToProps = (dispatch) => ({
-    getAccount: () => dispatch(userActions.getAccount()),
+    // getAccount: () => dispatch(userActions.getAccount()),
     getBeneficiaryAccount: (accNumber) => dispatch(userActions.getBeneficiaryAccount(accNumber)),
-    getListBeneficiaryAccount: () => dispatch(userActions.getBeneficiaryAccounts()),
+    // getListBeneficiaryAccount: () => dispatch(userActions.getBeneficiaryAccounts()),
+    // addBeneficiary: (beneficiaryInfo) => dispatch(userActions.addBeneficiary(beneficiaryInfo)),
 });
 
 

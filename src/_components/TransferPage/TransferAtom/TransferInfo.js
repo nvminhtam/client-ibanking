@@ -4,50 +4,14 @@ import {
     Input,
     Radio,
     Select,
-    Row,
-    Col,
     Button,
-    AutoComplete,
-    InputNumber
 } from 'antd'
+import { connect } from 'react-redux';
+import { userActions } from '../../../_actions/user.actions';
+
 
 const { TextArea } = Input;
 const { Option } = Select;
-const AutoCompleteOption = AutoComplete.Option;
-const residences = [
-    {
-        value: 'zhejiang',
-        label: 'Zhejiang',
-        children: [
-            {
-                value: 'hangzhou',
-                label: 'Hangzhou',
-                children: [
-                    {
-                        value: 'xihu',
-                        label: 'West Lake',
-                    },
-                ],
-            },
-        ],
-    },
-    {
-        value: 'jiangsu',
-        label: 'Jiangsu',
-        children: [
-            {
-                value: 'nanjing',
-                label: 'Nanjing',
-                children: [
-                    {
-                        value: 'zhonghuamen',
-                        label: 'Zhong Hua Men',
-                    },
-                ],
-            },
-        ],
-    },
-];
 const formItemLayout = {
     labelCol: {
         xs: {
@@ -80,13 +44,25 @@ const tailFormItemLayout = {
 };
 
 
-const TransferInfo = ({ value = {} }) => {
+const TransferInfo = (props) => {
     const [form] = Form.useForm();
-    const [number, setNumber] = useState(1);
-    const [charge, setCharge] = useState(1);
+    const [charge, setCharge] = useState(0);
 
     const onFinish = values => {
-        //console.log('Received values of form: ', values);
+        const transferAccountInfo = JSON.parse(localStorage.getItem('transferAccountInfo'))
+
+        if (transferAccountInfo) {
+            const { transferIntrabank } = props
+            const transferInfo = {
+                ...transferAccountInfo,
+                ...values
+            }
+            console.log(transferInfo)
+
+            transferIntrabank(transferInfo);
+        }
+        //     console.log(localStorage.getItem('transferAccountInfo'))
+        // console.log('Received values of form: ', values);
     };
 
     const radioStyle = {
@@ -96,25 +72,11 @@ const TransferInfo = ({ value = {} }) => {
     }
 
     const onChangeRadio = e => {
-        //console.log("a " + charge);
-
         setCharge(e.target.value)
-        //console.log(charge);
     }
 
-    const triggerChange = changedValue => {
-        //console.log("changedValue");
-        //console.log(changedValue);
-        if (onChange) {
-            onChange({
-                number,
-                ...changedValue,
-            });
-        }
-    };
-
     const prefixSelector = (
-        <Form.Item name="prefix" noStyle>
+        <Form.Item noStyle>
             <Select
                 style={{
                     width: 100,
@@ -125,41 +87,6 @@ const TransferInfo = ({ value = {} }) => {
             </Select>
         </Form.Item>
     );
-
-    const onChange = value => {
-        //console.log('changed', value);
-        // setValue(1)
-
-    }
-
-    const onBlur = () => {
-        //console.log('blur');
-    }
-
-    const onFocus = () => {
-        //console.log('focus');
-    }
-
-    const onSearch = (val) => {
-        //console.log('search:', val);
-    }
-
-    const onNumberChange = e => {
-        const newNumber = parseInt(e.target.value || 0, 10);
-
-        if (Number.isNaN(number)) {
-            //console.log(newNumber);
-            return;
-        }
-
-        if (!('number' in value)) {
-            setNumber(newNumber);
-        }
-
-        triggerChange({
-            number: newNumber,
-        });
-    };
 
     return (
         <Form
@@ -173,54 +100,8 @@ const TransferInfo = ({ value = {} }) => {
             }}
             scrollToFirstError
         >
-
-
-
-            {/* <Form.Item label="Account Number" className="border-bottom border-light p-3"
-               name="accountNumber"
-            rules={[
-                {
-                    required: true,
-                    message: 'Please input your phone number!',
-                },
-            ]}
-            >
-                <Input
-                    type="text"
-                    value={value.number || number}
-                    onChange={onNumberChange}
-                />
-            </Form.Item> */}
-            {/* <Form.Item label="Beneficiary" className="border-bottom border-light p-3">
-                <Select
-                    showSearch
-                    placeholder="Select a person"
-                    optionFilterProp="children"
-                    onChange={onChange}
-                    onFocus={onFocus}
-                    onBlur={onBlur}
-                    onSearch={onSearch}
-                    filterOption={(input, option) =>
-                        option.children.toLowerCase().indexOf(input.toLowerCase()) >= 0
-                    }
-                >
-                    <Option value="jack">Jack</Option>
-                    <Option value="lucy">Lucy</Option>
-                    <Option value="tom">Tom</Option>
-                </Select>
-            </Form.Item> */}
-
-            {/* <Form.Item label="Money">
-                    <InputNumber
-                        defaultValue={1000}
-                        formatter={value => `$ ${value}`.replace(/\B(?=(\d{3})+(?!\d))/g, ',')}
-                        parser={value => value.replace(/\$\s?|(,*)/g, '')}
-                        onChange={onChange}
-                    />
-                </Form.Item> */}
-
             <Form.Item className="border-bottom border-light p-3"
-                name="paymentAmount"
+                name="amount"
                 label="Payment amount"
                 rules={[
                     {
@@ -239,38 +120,25 @@ const TransferInfo = ({ value = {} }) => {
 
             <Form.Item label="Your note"
                 className="border-bottom border-light p-3"
-                name="description">
+                name="note">
                 <TextArea
                     placeholder="Autosize height with minimum and maximum number of lines"
                     autoSize={{ minRows: 2, maxRows: 6 }}
                 />
             </Form.Item>
 
-            {/* <Form.Item label="Reciever">
-                    <Select
-                        showSearch
-                        placeholder="Select a person"
-                        optionFilterProp="children"
-                        onChange={onChange}
-                        onFocus={onFocus}
-                        onBlur={onBlur}
-                        onSearch={onSearch}
-                        filterOption={(input, option) =>
-                            option.children.toLowerCase().indexOf(input.toLowerCase()) >= 0
-                        }
-                    >
-                        <Option value="jack">Jack</Option>
-                        <Option value="lucy">Lucy</Option>
-                        <Option value="tom">Tom</Option>
-                    </Select>
-                </Form.Item> */}
-
-            <Form.Item onChange={onChangeRadio} label="Charges *" className="border-bottom border-light p-3" name="changes">
+            <Form.Item onChange={onChangeRadio} label="Charges " className="border-bottom border-light p-3" name="charge_include"
+                rules={[
+                    {
+                        required: true,
+                        message: 'Please input charge!',
+                    },
+                ]}>
                 <Radio.Group value={charge}>
-                    <Radio style={radioStyle} value={1}>
+                    <Radio style={radioStyle} value={0}>
                         All charges to my account
         </Radio>
-                    <Radio style={radioStyle} value={2}>
+                    <Radio style={radioStyle} value={1}>
                         All charges to beneficiary's account
         </Radio>
                 </Radio.Group>
@@ -286,5 +154,22 @@ const TransferInfo = ({ value = {} }) => {
     );
 };
 
-export { TransferInfo }
+
+function mapStateToProps(state) {
+    return {
+        transferInforSuccess: state.users.transferInforSuccess,
+        transferError: state.users.transferError
+    };
+}
+
+const mapDispatchToProps = (dispatch) => ({
+    transferIntrabank: (transferInfor) => dispatch(userActions.transferIntrabank(transferInfor)),
+    // getBeneficiaryAccount: (accNumber) => dispatch(userActions.getBeneficiaryAccount(accNumber)),
+    // getListBeneficiaryAccount: () => dispatch(userActions.getBeneficiaryAccounts()),
+});
+
+
+const connectedTransferInfo = connect(mapStateToProps, mapDispatchToProps)(TransferInfo);
+
+export { connectedTransferInfo as TransferInfo }
 

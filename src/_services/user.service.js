@@ -12,6 +12,7 @@ export const userService = {
     getBeneficiaryAccounts,
     updateListBeneficiaryInfo,
     addBeneficiary,
+    transferIntrabank,
     delete: _delete
 };
 
@@ -101,6 +102,17 @@ function getBeneficiaryAccounts() {
     return fetch(config.apiUrl + '/api/customer/beneficiaries', requestOptions).then(handleResponse, handleError);
 }
 
+function transferIntrabank(transferInfor) {
+    const requestOptions = {
+        method: 'POST',
+        headers: { ...authHeader(), 'Content-Type': 'application/json' },
+        body: JSON.stringify(transferInfor)
+    };
+    return fetch(config.apiUrl + '/api/customer/intrabank-transfer-money/', requestOptions).then(handleResponse, handleError);
+}
+
+
+//----------------------------------
 function register(user) {
     const requestOptions = {
         method: 'POST',

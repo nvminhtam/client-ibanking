@@ -146,24 +146,25 @@ class BeneficiaryInforPage extends React.Component {
     };
 
     componentDidMount() {
-        const { getListBeneficiaryAccount } = this.props
-        getListBeneficiaryAccount();
+        // const { getListBeneficiaryAccount } = this.props
+        // getListBeneficiaryAccount();
     }
 
     static getDerivedStateFromProps(nextProps, prevState) {
-        return nextProps.listAccountBeneficiary && nextProps.listAccountBeneficiary !== prevState.listAccountBeneficiary && !prevState.isloaded
+        console.log(nextProps);
+        return nextProps.users.accountBeneficiarys && nextProps.users.accountBeneficiarys !== prevState.listAccountBeneficiary && !prevState.isloaded
             ? {
                 ...prevState,
-                listAccountBeneficiary: nextProps.listAccountBeneficiary,
+                listAccountBeneficiary: nextProps.users.accountBeneficiarys,
                 isloaded: true,
-                count: nextProps.listAccountBeneficiary.length + 1
+                count: nextProps.users.accountBeneficiarys.length + 1
             }
             : {
                 ...prevState
             }
     }
     handleDelete(row) {
-
+        console.log(row);
         const newRow = { ...row, type: "del" }
         const newData = [...this.state.listAccountBeneficiary];
         const index = newData.findIndex(item => newRow.key === item.key);
@@ -187,6 +188,7 @@ class BeneficiaryInforPage extends React.Component {
 
 
     render() {
+        console.log(this.props.users)
 
         const { listAccountBeneficiary } = this.state;
         const components = {
@@ -219,7 +221,7 @@ class BeneficiaryInforPage extends React.Component {
                 name: values.remindname || ''
             })
 
-            if (!this.props.addError === undefined) {
+            if (!this.props.error === undefined) {
                 const { count, listAccountBeneficiary } = this.state;
                 const newData = {
                     key: count,
@@ -240,7 +242,7 @@ class BeneficiaryInforPage extends React.Component {
             console.log('Failed:', errorInfo);
         };
 
-        // console.log(this.state.listAccountBeneficiary)
+        console.log(this.props.users)
 
         return (
             <div>
@@ -305,16 +307,15 @@ class BeneficiaryInforPage extends React.Component {
 
 function mapStateToProps(state) {
     return {
-        listAccountBeneficiary: state.users.accountBeneficiarys,
+        // listAccountBeneficiary: state.users.accountBeneficiarys,
         beneficiaryAccount: state.users.beneficiaryAccount,
-        success: state.users.success,
-        addError: state.users.addError
+        // success: state.users.success,
+        // error: state.users.error,
+        users: state.users
     };
 }
 
 const mapDispatchToProps = (dispatch) => ({
-    getListBeneficiaryAccount: () => dispatch(userActions.getBeneficiaryAccounts()),
-    // getBeneficiaryAccount: (accountnumber) => dispatch(userActions.getBeneficiaryAccount(accountnumber)),
     addBeneficiary: (beneficiaryInfo) => dispatch(userActions.addBeneficiary(beneficiaryInfo)),
     updateListBeneficiaryInfo: (listInfor) => dispatch(userActions.updateListBeneficiaryInfo(listInfor))
 });
