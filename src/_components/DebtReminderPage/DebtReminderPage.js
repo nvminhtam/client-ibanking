@@ -16,42 +16,11 @@ class DebtReminderPage extends Component {
     // const creditors = debtList.creditors;
     // console.log(creditors);
     console.log("debtList", debtList);
-    // const { creditors, payers } = debtList;
-    // const { payers } = this.props; // array
-
-    // const dataSource = [
-    //   {
-    //     key: "1",
-    //     name: "Mike",
-    //     age: 32,
-    //     address: "10 Downing Street",
-    //   },
-    //   {
-    //     key: "2",
-    //     name: "John",
-    //     age: 42,
-    //     address: "10 Downing Street",
-    //   },
-    // ];
-
-    // const creditors = [
-    //   {
-    //     id: 5,
-    //     creditor: "69324",
-    //     payer: "28349",
-    //     amount: 10000,
-    //     paid: 0,
-    //     description: "trả tiền tao",
-    //   },
-    //   {
-    //     id: 5,
-    //     creditor: "69324",
-    //     payer: "28349",
-    //     amount: 10000,
-    //     paid: 0,
-    //     description: "trả tiền tao",
-    //   },
-    // ];
+    if (!debtList) {
+      return <div></div>;
+    }
+    const { creditors, payers } = debtList;
+    console.log(creditors);
     const columns = [
       {
         title: "Chủ nợ",
@@ -82,10 +51,46 @@ class DebtReminderPage extends Component {
 
     return (
       <div>
-        {/* <Table dataSource={creditors} columns={columns}></Table> */}
+        <Table dataSource={creditors} columns={columns}></Table>
       </div>
     );
   }
+  // const { creditors, payers } = debtList;
+  // const { payers } = this.props; // array
+
+  // const dataSource = [
+  //   {
+  //     key: "1",
+  //     name: "Mike",
+  //     age: 32,
+  //     address: "10 Downing Street",
+  //   },
+  //   {
+  //     key: "2",
+  //     name: "John",
+  //     age: 42,
+  //     address: "10 Downing Street",
+  //   },
+  // ];
+
+  // const creditors = [
+  //   {
+  //     id: 5,
+  //     creditor: "69324",
+  //     payer: "28349",
+  //     amount: 10000,
+  //     paid: 0,
+  //     description: "trả tiền tao",
+  //   },
+  //   {
+  //     id: 5,
+  //     creditor: "69324",
+  //     payer: "28349",
+  //     amount: 10000,
+  //     paid: 0,
+  //     description: "trả tiền tao",
+  //   },
+  // ];
 }
 
 function mapStateToProps(state) {

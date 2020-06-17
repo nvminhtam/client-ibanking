@@ -18,7 +18,6 @@ class MyAccountPage extends Component {
     componentDidMount() {
         const { getAccount } = this.props
         getAccount();
-
     }
 
     render() {
