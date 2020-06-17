@@ -13,7 +13,8 @@ export const userActions = {
     getBeneficiaryAccounts,
     updateListBeneficiaryInfo,
     addBeneficiary,
-    delete: _delete
+    delete: _delete,
+    getTransactions,
 };
 
 function login(username, password) {
@@ -186,5 +187,22 @@ function addBeneficiary(beneficiaryInfor) {
     function request() { return { type: userConstants.ADD_BENEFICIARY_REQUEST } }
     function success(accountBeneficiary) { return { type: userConstants.ADD_BENEFICIARY_SUCCESS, accountBeneficiary } }
     function failure(error) { return { type: userConstants.ADD_BENEFICIARY_FAILURE, error } }
+
+}
+
+function getTransactions(account_number) {
+    return dispatch => {
+        dispatch(request());
+
+        userService.getTransactions(account_number)
+            .then(
+                listTransactions => dispatch(success(listTransactions)),
+                error => dispatch(failure(error))
+            );
+    };
+
+    function request() { return { type: userConstants.GET_TRANSACTIONS_REQUEST} }
+    function success(listTransactions) { return { type: userConstants.GET_TRANSACTIONS_SUCCESS, listTransactions } }
+    function failure(error) { return { type: userConstants.GET_TRANSACTIONS_FAILURE, error } }
 
 }

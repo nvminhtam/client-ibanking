@@ -100,7 +100,21 @@ export function users(state = {}, action) {
         ...state,
         addError: action.error
       };
-
+    case userConstants.GET_TRANSACTIONS_REQUEST:
+      return {
+        ...state,
+        loading: true
+      };
+    case userConstants.GET_TRANSACTIONS_SUCCESS:
+      return {
+        ...state,
+        listTransactions: action.listTransactions || {transfers:[], receivers: []}
+      };
+    case userConstants.GET_TRANSACTIONS_FAILURE:
+      return {
+        ...state,
+        addError: action.error
+      };
 
 
     case userConstants.DELETE_REQUEST:

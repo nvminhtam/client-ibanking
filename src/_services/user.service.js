@@ -12,7 +12,8 @@ export const userService = {
     getBeneficiaryAccounts,
     updateListBeneficiaryInfo,
     addBeneficiary,
-    delete: _delete
+    delete: _delete,
+    getTransactions,
 };
 
 function login(username, password) {
@@ -111,6 +112,20 @@ function register(user) {
     return fetch(config.apiUrl + '/api/customer/add', requestOptions).then(handleResponse, handleError);
 }
 
+
+
+function getTransactions(account_number) {
+    const requestOptions = {
+        method: 'GET',
+        headers: { ...authHeader(), 'Content-Type': 'application/json' },
+        // : JSON.stringify(account_number)
+        params: JSON.stringify(account_number),
+        
+    };
+    return fetch(config.apiUrl + '/api/customer/transactions/normal?account_number=' +account_number, requestOptions).then(handleResponse, handleError);
+}
+
+ 
 function update(user) {
     const requestOptions = {
         method: 'PUT',

@@ -18,7 +18,7 @@ import {
 import { TransferPage } from '../TransferPage'
 import { MyAccountPage } from '../MyAccountPage/MyAccountPage'
 import { BeneficiaryInforPage } from '../BeneficiaryInforPage/BeneficiaryInforPage'
-
+import {TransactionsTransferPage} from '../TransactionsHistoryPage/TransactionsTransfer/TransactionsTransferPage'
 const { SubMenu } = Menu;
 
 const comp = [
@@ -31,8 +31,8 @@ const comp = [
         content: <BeneficiaryInforPage />,
     },
     {
-        title: "Thẻ",
-        content: "Page 3",
+        title: "Lịch sử giao dịch",
+        content: <TransactionsTransferPage/>,
     },
     {
         title: "Chuyển hàng nội địa",
@@ -51,18 +51,17 @@ const comp = [
         content: "Page 3",
     },
     {
-        title: "option 11",
-        content: "Page 3",
+        title: "Tài khoản",
+        content: "<ChangePasswordPage/>",
     },
 ];
-
 
 class HomePage extends React.Component {
     constructor(props) {
         super(props)
         this.state = {
             collapsed: false,
-            key: "1"
+            key: "0"
         }
     }
     componentDidMount() {
@@ -83,7 +82,7 @@ class HomePage extends React.Component {
         const toggleCollapsed = () => {
             this.setState({
                 collapsed: !this.state.collapsed,
-            });
+            }); 
         };
         const handleClick = e => {
             this.setState({
@@ -93,10 +92,8 @@ class HomePage extends React.Component {
         return (
             <div className="row" >
                 <div className="col-2" style={{ backgroundColor: '#000c17' }}>
-                    <div style={{ width: 200 }} >
-                        <Button type="primary" onClick={toggleCollapsed} >
-                            {React.createElement(this.state.collapsed ? MenuUnfoldOutlined : MenuFoldOutlined)}
-                        </Button>
+                    <div style={{ width: 200, height: "100%" }} >
+                        
                         <Menu
                             defaultSelectedKeys={['0']}
                             defaultOpenKeys={['sub1', 'sub2', 'sub3']}
@@ -112,7 +109,7 @@ class HomePage extends React.Component {
                                 Thông tin
                 </Menu.Item>
                             <Menu.Item key="2" icon={<ContainerOutlined />}>
-                                Thẻ
+                                Lịch sử giao dịch
                 </Menu.Item>
                             <SubMenu key="sub1" icon={<MailOutlined />} title="Chuyển tiền">
                                 <Menu.Item key="3">Ngân hàng nội địa</Menu.Item>
@@ -121,8 +118,8 @@ class HomePage extends React.Component {
                             <SubMenu key="sub2" icon={<AppstoreOutlined />} title="Danh sách">
                                 <Menu.Item key="5">Danh sách nợ</Menu.Item>
                                 <Menu.Item key="6">Danh sách người nhận</Menu.Item>
-                                <SubMenu key="sub3" title="Submenu">
-                                    <Menu.Item key="7">Option 11</Menu.Item>
+                                <SubMenu key="sub3" title="Tài khoản">
+                                    <Menu.Item key="7">Đổi mật khẩu</Menu.Item>
                                     <Menu.Item ><LogoutOutlined /> <Link to="/login">Logout</Link></Menu.Item>
                                 </SubMenu>
                             </SubMenu>
