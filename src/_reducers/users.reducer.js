@@ -132,11 +132,13 @@ export function users(state = {}, action) {
         ...state,
         loading: true,
       };
-    case userConstants.GET_DEBTLIST_SUCCESS:
+    case userConstants.GET_DEBTLIST_SUCCESS: {
+      console.log(action);
       return {
         ...state,
         debtList: action.debtList || {},
       };
+    }
     case userConstants.GET_DEBTLIST_FAILURE:
       return {
         ...state,

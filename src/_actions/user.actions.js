@@ -240,6 +240,7 @@ function getDebtsList() {
     dispatch(request());
 
     userService.getDebtsList().then(
+      
       (debtList) => dispatch(success(debtList)),
       (error) => dispatch(failure(error))
     );

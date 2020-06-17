@@ -5,44 +5,18 @@ import { userActions } from "../../_actions/user.actions";
 import { Table } from "antd";
 
 class DebtReminderPage extends Component {
-  constructor(props) {
-    super(props);
-
-    this.state = {
-      debtList: null,
-      isloaded: false,
-    };
-  }
-
   componentDidMount() {
-    // const { getAccount } = this.props;
-    // getAccount();
-
-    const { getDebtList } = this.props;
-    getDebtList();
+    const { getDebtsList } = this.props;
+    getDebtsList();
   }
 
-  static getDerivedStateFromProps(nextProps, prevState) {
-    return nextProps.debtList &&
-      nextProps.debtList !== prevState.debtList &&
-      !prevState.isloaded
-      ? {
-          ...prevState,
-          debtList: nextProps.debtList,
-          isloaded: true,
-        }
-      : {
-          ...prevState,
-        };
-  }
   render() {
-    const { debtList } = this.state; // array
+    const { debtList } = this.props; // array null
 
     // const creditors = debtList.creditors;
     // console.log(creditors);
-    console.log('debtList', debtList);
+    console.log("debtList", debtList);
     // const { creditors, payers } = debtList;
-    // console.log(getDebtList);
     // const { payers } = this.props; // array
 
     // const dataSource = [
@@ -107,7 +81,9 @@ class DebtReminderPage extends Component {
     ];
 
     return (
-      <div>{/* <Table dataSource={creditors} columns={columns} /> */}</div>
+      <div>
+        {/* <Table dataSource={creditors} columns={columns}></Table> */}
+      </div>
     );
   }
 }
@@ -115,15 +91,11 @@ class DebtReminderPage extends Component {
 function mapStateToProps(state) {
   return {
     debtList: state.users.debtList,
-    success: state.users.success,
-    addError: state.users.addError,
-    // accountOwner: state.users.accountOwner,
   };
 }
 
 const mapDispatchToProps = (dispatch) => ({
-  // getAccount: () => dispatch(userActions.getAccount()),
-  getDebtList: () => dispatch(userActions.getDebtsList()),
+  getDebtsList: () => dispatch(userActions.getDebtsList()),
 });
 
 const connectedDebtReminderPage = connect(
