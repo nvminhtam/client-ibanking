@@ -231,5 +231,20 @@ class Contacts extends React.Component {
     );
   }
 }
+function mapStateToProps(state) {
+  return {
+    accountOwner: state.users.accountOwner,
+    accountBeneficiary: state.users.accountBeneficiary,
+    listAccountBeneficiary: state.users.accountBeneficiarys
+  };
+}
 
-export  {Contacts} 
+const mapDispatchToProps = (dispatch) => ({
+  getAccount: () => dispatch(userActions.getAccount()),
+  getBeneficiaryAccount: (accNumber) => dispatch(userActions.getBeneficiaryAccount(accNumber)),
+  getListBeneficiaryAccount: () => dispatch(userActions.getBeneficiaryAccounts()),
+});
+
+const connectedMyAccountPage = connect(mapStateToProps, mapDispatchToProps)(Contacts);
+export { connectedMyAccountPage as Contacts }
+
