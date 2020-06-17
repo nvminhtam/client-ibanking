@@ -63,7 +63,7 @@ class Beneficiary extends Component {
     constructor(props) {
         super(props);
         this.state = {
-            isSaveBeneficiary: true,
+            isSaveBeneficiary: false,
             isDisable: true,
             Collapse: 0,
             accountBeneficiary: {}
@@ -71,25 +71,30 @@ class Beneficiary extends Component {
     }
 
     searchInfor(value) {
-        if (value === "" || value === undefined || value === null) return
-
+        let isExist = false
         this.props.listAccountBeneficiary.forEach(acc => {
             if (acc.beneficiary_account === value) {
-                console.log(value)
+                console.log("value", isExist, value);
+                isExist = true
                 return
             }
         });
         //return here bug
-        const { getBeneficiaryAccount } = this.props
-        getBeneficiaryAccount({ account_number: value });
+        if (!isExist) {
+            const { getBeneficiaryAccount } = this.props
+            getBeneficiaryAccount({ account_number: value });
 
-        this.setState({
-            accountBeneficiary: {
-                ...this.props.accountBeneficiary
-            },
-            Collapse: "1",
-            isDisable: false
-        })
+            if (this.props.users.success) {
+                this.setState({
+                    accountBeneficiary: {
+                        ...this.props.accountBeneficiary
+                    },
+                    Collapse: "1",
+                    isDisable: false
+                })
+            }
+        }
+
     }
 
     onSelect(value) {
@@ -129,7 +134,7 @@ class Beneficiary extends Component {
                     {...layout}
                     name="basic"
                     initialValues={{ remember: true, bank: "NKLBank" }}
-                    onFinish={(data) => this.props.onNext(data)}
+                    onFinish={(data) => this.props.onNext({ isSaveBeneficiary: this.state.isSaveBeneficiary, ...data })}
                     onFinishFailed={onFinishFailed}
                 >
                     <Form.Item label="Your account" className="border-bottom border-light p-3"
@@ -216,6 +221,7 @@ const mapStateToProps = (state) => {
         accountBeneficiary: users.accountBeneficiary,
         listAccountBeneficiary: users.accountBeneficiarys,
         // addError: users.addError,
+        users: state.users
 
     };
 }

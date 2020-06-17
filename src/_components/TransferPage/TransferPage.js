@@ -44,7 +44,12 @@ class TransferPage extends Component {
     }
 
     next(data) {
+        console.log(data.receiver)
 
+        if (this.state.current === 0) {
+            if (data.isSaveBeneficiary)
+                this.props.addBeneficiary(data.receiver)
+        }
         if (this.state.current == 2) {
             this.props.sendOtp(data)
             if (!this.props.users.error) {
@@ -113,6 +118,7 @@ const mapStateToProps = (state) => {
 const mapDispatchToProps = (dispatch) => ({
     sendOtp: (OtpMsg) => dispatch(userActions.sendOtp(OtpMsg)),
     transferIntrabank: (transferInfor) => dispatch(userActions.transferIntrabank(transferInfor)),
+    addBeneficiary: (beneficiaryInfo) => dispatch(userActions.addBeneficiary(beneficiaryInfo)),
 });
 
 

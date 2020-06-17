@@ -42,7 +42,7 @@ const renderItem = (title, count) => ({
 
 const options = (values = []) => [
     {
-        options: values.map((value, i) => (value.partner_bank === "") && renderItem(value.beneficiary_account, value.beneficiary_name)),
+        options: values.map((value, i) => ((value.partner_bank) === 'abc') && renderItem(value.beneficiary_account, value.beneficiary_name)),
     },
 ];
 
@@ -69,23 +69,30 @@ class Beneficiary extends Component {
     searchInfor(value) {
         if (value === "" || value === undefined || value === null) return
 
+        let isExist = false
         this.props.listAccountBeneficiary.forEach(acc => {
             if (acc.beneficiary_account === value) {
-                console.log(value)
+                console.log("value", isExist, value);
+                isExist = true
                 return
             }
         });
         //return here bug
-        const { getBeneficiaryAccount } = this.props
-        getBeneficiaryAccount({ account_number: value });
+        if (!isExist) {
+            console.log("isExist", isExist);
+            const { getBeneficiaryAccount } = this.props
+            getBeneficiaryAccount({ account_number: value });
 
-        this.setState({
-            accountBeneficiary: {
-                ...this.props.accountBeneficiary
-            },
-            Collapse: "1",
-            isDisable: false
-        })
+            this.setState({
+                accountBeneficiary: {
+                    ...this.props.accountBeneficiary
+                },
+                Collapse: "1",
+                isDisable: false
+            })
+        }
+
+
     }
 
     onSelect(value) {
@@ -118,7 +125,7 @@ class Beneficiary extends Component {
         const { accountOwner, listAccountBeneficiary } = this.props
         const { accountBeneficiary } = this.state
 
-        console.log(this.props);
+        // console.log(JSON.stringify(this.props));
         return (
             <div>
                 <Form
@@ -161,6 +168,7 @@ class Beneficiary extends Component {
                                 size="large"
                                 placeholder="input here"
                                 onSearch={(value) => { this.searchInfor(value) }}
+
                             />
                         </AutoComplete>
                     </Form.Item>
@@ -190,7 +198,7 @@ class Beneficiary extends Component {
                     </Collapse>
 
                     <Form.Item >
-                        <Button type="primary" htmlType="submit">
+                        <Button type="primary" htmlType="submit" disabled={!this.props.users.error}>
                             Next
                    </Button>
                     </Form.Item>
@@ -210,6 +218,7 @@ const mapStateToProps = (state) => {
         accountOwner: users.accountOwner,
         accountBeneficiary: users.accountBeneficiary,
         listAccountBeneficiary: users.accountBeneficiarys,
+        users: state.users
         // addError: users.addError,
 
     };

@@ -44,8 +44,9 @@ export function users(state = {}, action) {
     case userConstants.GET_ACCOUNTINFO_SUCCESS:
       return {
         ...state,
-        accountBeneficiary: action.accountBeneficiary || {}
-      };
+        accountBeneficiary: action.accountBeneficiary || {},
+        success: "get infor success"
+      }
     case userConstants.GET_ACCOUNTINFO_FAILURE:
       return {
         ...state,
@@ -108,7 +109,7 @@ export function users(state = {}, action) {
     case userConstants.GET_TRANSACTIONS_SUCCESS:
       return {
         ...state,
-        listTransactions: action.listTransactions || {transfers:[], receivers: []}
+        listTransactions: action.listTransactions || { transfers: [], receivers: [] }
       };
     case userConstants.GET_TRANSACTIONS_FAILURE:
       return {
@@ -116,21 +117,21 @@ export function users(state = {}, action) {
         addError: action.error
       };
 
-      case userConstants.TRANSFER_INTRABANK_REQUEST:
-        return {
-          ...state,
-          loading: true
-        };
-      case userConstants.TRANSFER_INTRABANK_SUCCESS:
-        return {
-          ...state,
-          transferInforSuccess: action.transferInforSuccess || {}
-        };
-      case userConstants.TRANSFER_INTRABANK_FAILURE:
-        return {
-          ...state,
-          error: action.error
-        };
+    case userConstants.TRANSFER_INTRABANK_REQUEST:
+      return {
+        ...state,
+        loading: true
+      };
+    case userConstants.TRANSFER_INTRABANK_SUCCESS:
+      return {
+        ...state,
+        transferInforSuccess: action.transferInforSuccess || {}
+      };
+    case userConstants.TRANSFER_INTRABANK_FAILURE:
+      return {
+        ...state,
+        error: action.error
+      };
     case userConstants.SEND_OTP_REQUEST:
       return {
         ...state,

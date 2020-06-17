@@ -18,7 +18,7 @@ import {
 import { TransferPage } from '../TransferPage'
 import { MyAccountPage } from '../MyAccountPage/MyAccountPage'
 import { BeneficiaryInforPage } from '../BeneficiaryInforPage/BeneficiaryInforPage'
-import {TransactionsTransferPage} from '../TransactionsHistoryPage/TransactionsTransfer/TransactionsTransferPage'
+import { TransactionsTransferPage } from '../TransactionsHistoryPage/TransactionsTransfer/TransactionsTransferPage'
 import { CreateDebtPage } from '../DebtManagementPage/CreateDebtPage'
 import { ChangePasswordPage } from '../ChangePasswordPage/ChangePasswordPage'
 import { TransferInterBankPage } from '../TransferPage'
@@ -37,7 +37,7 @@ const comp = [
     },
     {
         title: "Lịch sử giao dịch",
-        content: <TransactionsTransferPage/>,
+        content: <TransactionsTransferPage />,
     },
     {
         title: "Chuyển hàng nội địa",
@@ -88,7 +88,7 @@ class HomePage extends React.Component {
         const toggleCollapsed = () => {
             this.setState({
                 collapsed: !this.state.collapsed,
-            }); 
+            });
         };
         const handleClick = e => {
             this.setState({
