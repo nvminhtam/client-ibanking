@@ -14,6 +14,9 @@ export const userService = {
     addBeneficiary,
     delete: _delete,
     getTransactions,
+    transferIntrabank,
+    sendOtp,
+    getOtp,
 };
 
 function login(username, password) {
@@ -102,6 +105,33 @@ function getBeneficiaryAccounts() {
     return fetch(config.apiUrl + '/api/customer/beneficiaries', requestOptions).then(handleResponse, handleError);
 }
 
+function transferIntrabank(transferInfor) {
+    const requestOptions = {
+        method: 'POST',
+        headers: { ...authHeader(), 'Content-Type': 'application/json' },
+        body: JSON.stringify(transferInfor)
+    };
+    return fetch(config.apiUrl + '/api/customer/intrabank-transfer-money/', requestOptions).then(handleResponse, handleError);
+}
+
+function getOtp() {
+    const requestOptions = {
+        method: 'GET',
+        headers: { ...authHeader() },
+    };
+    return fetch(config.apiUrl + '/api/auth/otp', requestOptions).then(handleResponse, handleError);
+}
+
+function sendOtp(optMgs) {
+    const requestOptions = {
+        method: 'POST',
+        headers: { ...authHeader(), 'Content-Type': 'application/json' },
+        body: JSON.stringify(optMgs)
+    };
+    return fetch(config.apiUrl + '/api/auth/otp', requestOptions).then(handleResponse, handleError);
+}
+
+//----------------------------------
 function register(user) {
     const requestOptions = {
         method: 'POST',

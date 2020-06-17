@@ -16,8 +16,6 @@ const layout = {
     wrapperCol: { span: 16 },
 };
 
-
-
 const accountInfo = (info = {}) => (
     <div >
         <p><b>Beneficiary's Name:</b> {info.beneficiary_name}</p>
@@ -44,9 +42,7 @@ const renderItem = (title, count) => ({
 
 const options = (values = []) => [
     {
-        options: values.map((value, i) =>
-            value.partner_bank === null && renderItem(value.beneficiary_account, value.beneficiary_name)
-        ),
+        options: values.map((value, i) => (value.partner_bank === "") && renderItem(value.beneficiary_account, value.beneficiary_name)),
     },
 ];
 
@@ -169,16 +165,15 @@ class Beneficiary extends Component {
                         </AutoComplete>
                     </Form.Item>
 
-                    {/* <Form.Item label="choose bank" className="border-bottom border-light p-3">
+                    <Form.Item label="choose bank" name="bank" className="border-bottom border-light p-3">
                         <Select
                         //   onChange={onGenderChange}
                         // defaultValue="NKLBank"
                         >
-                            <Option value="NKLBank">NKL Bank</Option>
                             <Option value="MPBank">MP Bank</Option>
                             <Option value="Q2Bank">Q2 Bank</Option>
                         </Select>
-                    </Form.Item> */}
+                    </Form.Item>
 
                     <Form.Item label="Save Beneficiary" className="border-bottom border-light pl-3">
                         <Checkbox disabled={this.state.isDisable} onChange={() => this.setState({ isSaveBeneficiary: !this.state.isSaveBeneficiary })} checked={this.state.isSaveBeneficiary}> </Checkbox>

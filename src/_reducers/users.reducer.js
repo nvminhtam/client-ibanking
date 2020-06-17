@@ -98,7 +98,7 @@ export function users(state = {}, action) {
     case userConstants.ADD_BENEFICIARY_FAILURE:
       return {
         ...state,
-        addError: action.error
+        error: action.error
       };
     case userConstants.GET_TRANSACTIONS_REQUEST:
       return {
@@ -116,6 +116,52 @@ export function users(state = {}, action) {
         addError: action.error
       };
 
+      case userConstants.TRANSFER_INTRABANK_REQUEST:
+        return {
+          ...state,
+          loading: true
+        };
+      case userConstants.TRANSFER_INTRABANK_SUCCESS:
+        return {
+          ...state,
+          transferInforSuccess: action.transferInforSuccess || {}
+        };
+      case userConstants.TRANSFER_INTRABANK_FAILURE:
+        return {
+          ...state,
+          error: action.error
+        };
+    case userConstants.SEND_OTP_REQUEST:
+      return {
+        ...state,
+        loading: true
+      };
+    case userConstants.SEND_OTP_SUCCESS:
+      return {
+        ...state,
+        successOtpMsg: action.successOtpMsg || {}
+      };
+    case userConstants.SEND_OTP_FAILURE:
+      return {
+        ...state,
+        error: action.error
+      };
+
+    case userConstants.GET_OTP_REQUEST:
+      return {
+        ...state,
+        loading: true
+      };
+    case userConstants.GETALL_SUCCESS:
+      return {
+        ...state,
+        sucess: action.sucess || {}
+      };
+    case userConstants.GETALL_FAILURE:
+      return {
+        ...state,
+        error: action.error
+      };
 
     case userConstants.DELETE_REQUEST:
       // add 'deleting:true' property to user being deleted

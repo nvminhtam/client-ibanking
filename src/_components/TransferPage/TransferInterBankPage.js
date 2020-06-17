@@ -5,11 +5,10 @@ import { UserOutlined, SolutionOutlined, LoadingOutlined, SmileOutlined } from '
 import { connect } from 'react-redux';
 import { userActions } from '../../_actions/user.actions';
 
-import { TransferInfo } from './TransferAtom/TransferInfo'
-import { BeneficiaryAccount } from './TransferAtom/BeneficiaryAccount';
-import { VerifyOTP } from './TransferAtom/VerifyOTP'
+import { TransferInfo } from './TransferInterAtom/TransferInfo'
+import { BeneficiaryAccount } from './TransferInterAtom/BeneficiaryAccount';
+import { VerifyOTP } from './TransferInterAtom/VerifyOTP'
 const { Step } = Steps;
-
 
 
 const steps = [
@@ -29,7 +28,7 @@ const steps = [
 ];
 
 
-class TransferPage extends Component {
+class TransferInterBankPage extends Component {
     constructor(props) {
         super(props);
         this.state = {
@@ -116,8 +115,8 @@ const mapDispatchToProps = (dispatch) => ({
 });
 
 
-const connectedTransferPage = connect(mapStateToProps, mapDispatchToProps)(TransferPage);
+const connectedTransferInterBankPage = connect(mapStateToProps, mapDispatchToProps)(TransferInterBankPage);
 
-export { connectedTransferPage as TransferPage }
+export { connectedTransferInterBankPage as TransferInterBankPage }
 
 

@@ -19,6 +19,10 @@ import { TransferPage } from '../TransferPage'
 import { MyAccountPage } from '../MyAccountPage/MyAccountPage'
 import { BeneficiaryInforPage } from '../BeneficiaryInforPage/BeneficiaryInforPage'
 import {TransactionsTransferPage} from '../TransactionsHistoryPage/TransactionsTransfer/TransactionsTransferPage'
+import { CreateDebtPage } from '../DebtManagementPage/CreateDebtPage'
+
+import { TransferInterBankPage } from '../TransferPage'
+
 const { SubMenu } = Menu;
 
 const comp = [
@@ -40,11 +44,11 @@ const comp = [
     },
     {
         title: "Ngân hàng khác",
-        content: "Page 3",
+        content: <TransferInterBankPage />,
     },
     {
         title: "Danh sách nợ",
-        content: "Page 3",
+        content: <CreateDebtPage />,
     },
     {
         content: "Danh sách người nhận",
@@ -65,8 +69,9 @@ class HomePage extends React.Component {
         }
     }
     componentDidMount() {
-        const { userActions } = this.props
-        userActions();
+        this.props.userActions();
+        this.props.getListBeneficiaryAccount();
+        this.props.getAccount();
         // let user = JSON.parse(localStorage.getItem('user'));
     }
 
@@ -89,11 +94,16 @@ class HomePage extends React.Component {
                 key: e.key,
             });
         };
+
+        // console.log("user");
+        // console.log(this.props.users);
         return (
             <div className="row" >
                 <div className="col-2" style={{ backgroundColor: '#000c17' }}>
-                    <div style={{ width: 200, height: "100%" }} >
-                        
+                    <div  >
+                        <Button type="primary" onClick={toggleCollapsed} >
+                            {React.createElement(this.state.collapsed ? MenuUnfoldOutlined : MenuFoldOutlined)}
+                        </Button>
                         <Menu
                             defaultSelectedKeys={['0']}
                             defaultOpenKeys={['sub1', 'sub2', 'sub3']}
@@ -126,8 +136,9 @@ class HomePage extends React.Component {
                         </Menu>
                     </div>
                 </div>
-                <div className="col-9 p-5"> <h2> {comp[this.state.key].title}</h2>
+                <div className="col-8 offset-1"> <h2> {comp[this.state.key].title}</h2>
                     {users.error && <span className="text-danger">ERROR: {users.error}</span>}
+                    {users.success && <span className="text-success">SUCCESS: {users.success}</span>}
                     {comp[this.state.key].content}
 
                 </div>
@@ -149,6 +160,7 @@ function mapStateToProps(state) {
 const mapDispatchToProps = (dispatch) => ({
     userActions: () => dispatch(userActions.getAll()),
     getAccount: () => dispatch(userActions.getAccount()),
+    getListBeneficiaryAccount: () => dispatch(userActions.getBeneficiaryAccounts()),
 });
 
 const connectedHomePage = connect(mapStateToProps, mapDispatchToProps)(HomePage);
