@@ -14,6 +14,8 @@ export const userActions = {
     updateListBeneficiaryInfo,
     addBeneficiary,
     transferIntrabank,
+    getOtp,
+    sendOtp,
     delete: _delete
 };
 
@@ -205,5 +207,42 @@ function transferIntrabank(transferInfor) {
     function request() { return { type: userConstants.TRANSFER_INTRABANK_REQUEST } }
     function success(transferInforSuccess) { return { type: userConstants.TRANSFER_INTRABANK_SUCCESS, transferInforSuccess } }
     function failure(error) { return { type: userConstants.TRANSFER_INTRABANK_FAILURE, error } }
+
+}
+
+
+
+
+function sendOtp(optMgs) {
+    return dispatch => {
+        dispatch(request());
+
+        userService.sendOtp(optMgs)
+            .then(
+                successMsg => dispatch(success(successMsg)),
+                error => dispatch(failure(error))
+            );
+    };
+
+    function request() { return { type: userConstants.SEND_OTP_REQUEST } }
+    function success(successOtpMsg) { return { type: userConstants.SEND_OTP_SUCCESS, successOtpMsg } }
+    function failure(error) { return { type: userConstants.SEND_OTP_FAILURE, error } }
+
+}
+
+function getOtp() {
+    return dispatch => {
+        dispatch(request());
+
+        userService.getOtp()
+            .then(
+                successMgs => dispatch(success(successMgs)),
+                error => dispatch(failure(error))
+            );
+    };
+
+    function request() { return { type: userConstants.GET_OTP_REQUEST } }
+    function success(successMgs) { return { type: userConstants.GET_OTP_SUCCESS, successMgs } }
+    function failure(error) { return { type: userConstants.GET_OTP_FAILURE, error } }
 
 }

@@ -117,6 +117,38 @@ export function users(state = {}, action) {
         error: action.error
       };
 
+    case userConstants.SEND_OTP_REQUEST:
+      return {
+        ...state,
+        loading: true
+      };
+    case userConstants.SEND_OTP_SUCCESS:
+      return {
+        ...state,
+        successOtpMsg: action.successOtpMsg || {}
+      };
+    case userConstants.SEND_OTP_FAILURE:
+      return {
+        ...state,
+        error: action.error
+      };
+
+    case userConstants.GET_OTP_REQUEST:
+      return {
+        ...state,
+        loading: true
+      };
+    case userConstants.GETALL_SUCCESS:
+      return {
+        ...state,
+        sucess: action.sucess || {}
+      };
+    case userConstants.GETALL_FAILURE:
+      return {
+        ...state,
+        error: action.error
+      };
+
     case userConstants.DELETE_REQUEST:
       // add 'deleting:true' property to user being deleted
       return {

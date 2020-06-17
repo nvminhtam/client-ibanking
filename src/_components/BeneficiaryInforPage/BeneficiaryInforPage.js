@@ -145,11 +145,6 @@ class BeneficiaryInforPage extends React.Component {
         });
     };
 
-    componentDidMount() {
-        // const { getListBeneficiaryAccount } = this.props
-        // getListBeneficiaryAccount();
-    }
-
     static getDerivedStateFromProps(nextProps, prevState) {
         console.log(nextProps);
         return nextProps.users.accountBeneficiarys && nextProps.users.accountBeneficiarys !== prevState.listAccountBeneficiary && !prevState.isloaded
@@ -221,7 +216,7 @@ class BeneficiaryInforPage extends React.Component {
                 name: values.remindname || ''
             })
 
-            if (!this.props.error === undefined) {
+            if (!this.props.users.error === undefined) {
                 const { count, listAccountBeneficiary } = this.state;
                 const newData = {
                     key: count,
@@ -262,7 +257,7 @@ class BeneficiaryInforPage extends React.Component {
                         onOk={() => this.setState({ visible: false })}
                         onCancel={() => this.setState({ visible: false })}
                     >
-                        {this.props.addError && <div className="text-danger">{this.props.addError}</div>}
+                        {this.props.users.error && <div className="text-danger">{this.props.users.error}</div>}
                         <Form
                             name="basic"
                             initialValues={{ remember: true }}

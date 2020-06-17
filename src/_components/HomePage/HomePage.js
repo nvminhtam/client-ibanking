@@ -20,6 +20,8 @@ import { MyAccountPage } from '../MyAccountPage/MyAccountPage'
 import { BeneficiaryInforPage } from '../BeneficiaryInforPage/BeneficiaryInforPage'
 import { CreateDebtPage } from '../DebtManagementPage/CreateDebtPage'
 
+import { TransferInterBankPage } from '../TransferPage'
+
 const { SubMenu } = Menu;
 
 const comp = [
@@ -41,7 +43,7 @@ const comp = [
     },
     {
         title: "Ngân hàng khác",
-        content: "Page 3",
+        content: <TransferInterBankPage />,
     },
     {
         title: "Danh sách nợ",
@@ -98,7 +100,7 @@ class HomePage extends React.Component {
         return (
             <div className="row" >
                 <div className="col-2" style={{ backgroundColor: '#000c17' }}>
-                    <div style={{ width: 200 }} >
+                    <div  >
                         <Button type="primary" onClick={toggleCollapsed} >
                             {React.createElement(this.state.collapsed ? MenuUnfoldOutlined : MenuFoldOutlined)}
                         </Button>
@@ -134,7 +136,7 @@ class HomePage extends React.Component {
                         </Menu>
                     </div>
                 </div>
-                <div className="col-9 p-5"> <h2> {comp[this.state.key].title}</h2>
+                <div className="col-8 offset-1"> <h2> {comp[this.state.key].title}</h2>
                     {users.error && <span className="text-danger">ERROR: {users.error}</span>}
                     {users.success && <span className="text-success">SUCCESS: {users.success}</span>}
                     {comp[this.state.key].content}
