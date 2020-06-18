@@ -48,13 +48,20 @@ class TransferPage extends Component {
 
         if (this.state.current === 0) {
             if (data.isSaveBeneficiary)
-                this.props.addBeneficiary(data.receiver)
+                this.props.addBeneficiary({ beneficiary_account: data.receiver })
         }
         if (this.state.current == 2) {
             this.props.sendOtp(data)
             if (!this.props.users.error) {
 
-                this.props.transferIntrabank(this.state.data)
+                const transferInfor = {
+                    depositor: this.state.data.depositor,
+                    receiver: this.state.data.receiver,
+                    amount: this.state.data.amount,
+                    note: this.state.data.note,
+                    charge_include: this.state.data.charge_include
+                }
+                this.props.transferIntrabank(transferInfor)
                 if (!this.props.users.error)
                     message.success(this.props.users.error)
             }
@@ -69,8 +76,6 @@ class TransferPage extends Component {
                 }
             });
         }
-
-
 
     }
 
@@ -90,6 +95,7 @@ class TransferPage extends Component {
             // </div>
             <div className="shadow-lg p-3 mb-5 bg-white rounded">
                 {/* {JSON.stringify(this.props.users)} */}
+                {this.props.transferInforSuccess}
                 <div className="steps-content">
                     <div className="p-5 border bg-white">
                         {steps[current].content((data) => this.next(data))}
@@ -111,7 +117,8 @@ class TransferPage extends Component {
 const mapStateToProps = (state) => {
     return {
         successOtpMsg: state.users.successOtpMsg,
-        users: state.users
+        users: state.users,
+        transferInforSuccess: state.users.transferInforSuccess
     };
 }
 

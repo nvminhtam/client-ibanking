@@ -216,7 +216,7 @@ class BeneficiaryInforPage extends React.Component {
                 name: values.remindname || ''
             })
 
-            if (!this.props.users.error === undefined) {
+            if (this.props.users.beneficiaryAccount !== {}) {
                 const { count, listAccountBeneficiary } = this.state;
                 const newData = {
                     key: count,
@@ -237,7 +237,7 @@ class BeneficiaryInforPage extends React.Component {
             console.log('Failed:', errorInfo);
         };
 
-        console.log(this.props.users)
+        console.log(this.state.listAccountBeneficiary)
 
         return (
             <div>

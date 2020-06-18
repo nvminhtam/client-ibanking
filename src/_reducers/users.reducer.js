@@ -123,10 +123,14 @@ export function users(state = {}, action) {
         loading: true
       };
     case userConstants.TRANSFER_INTRABANK_SUCCESS:
-      return {
-        ...state,
-        transferInforSuccess: action.transferInforSuccess || {}
-      };
+      {
+        // console.log(action)
+        return {
+          ...state,
+          transferInforSuccess: action.transferInforSuccess || {},
+
+        };
+      }
     case userConstants.TRANSFER_INTRABANK_FAILURE:
       return {
         ...state,
