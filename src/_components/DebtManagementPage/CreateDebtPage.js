@@ -2,7 +2,7 @@ import React, { Component } from "react";
 import { connect } from "react-redux";
 import { userActions } from "../../_actions/user.actions";
 
-import { Table } from "antd";
+import { Table, Button, Tag } from "antd";
 
 class CreateDebtPage extends Component {
   componentDidMount() {
@@ -20,6 +20,8 @@ class CreateDebtPage extends Component {
       return <div></div>;
     }
     const { creditors, payers } = debtList;
+    const visible_debt = [...payers].filter(debt => debt.visibleToPayer == 1)
+    const list = [...creditors, ...visible_debt]
     console.log(creditors);
     const columns = [
       {
@@ -41,56 +43,38 @@ class CreateDebtPage extends Component {
         title: "Thanh toán",
         dataIndex: "paid",
         key: "paid",
+        render: paid => {
+          let color = paid === 0 ? 'red' : 'green';
+          let text = (paid === 0 ? 'chưa thanh toán' : 'đã thanh toán');
+          return (
+            <Tag color={color} key={paid}>
+              {text.toUpperCase()}
+            </Tag>
+          );
+        }
       },
       {
         title: "Mô tả",
         dataIndex: "description",
         key: "description",
       },
+      {
+        title:"Thao tác",
+        key: "action",
+        render: ()=>(
+          <Button danger>XÓA</Button>
+        )
+      }
     ];
 
     return (
       <div>
-        <Table dataSource={creditors} columns={columns}></Table>
+        <Button type="primary" id="add_debtRemind">Tạo nhắc nợ</Button>
+        <Table dataSource={list} columns={columns}></Table>
+
       </div>
     );
   }
-  // const { creditors, payers } = debtList;
-  // const { payers } = this.props; // array
-
-  // const dataSource = [
-  //   {
-  //     key: "1",
-  //     name: "Mike",
-  //     age: 32,
-  //     address: "10 Downing Street",
-  //   },
-  //   {
-  //     key: "2",
-  //     name: "John",
-  //     age: 42,
-  //     address: "10 Downing Street",
-  //   },
-  // ];
-
-  // const creditors = [
-  //   {
-  //     id: 5,
-  //     creditor: "69324",
-  //     payer: "28349",
-  //     amount: 10000,
-  //     paid: 0,
-  //     description: "trả tiền tao",
-  //   },
-  //   {
-  //     id: 5,
-  //     creditor: "69324",
-  //     payer: "28349",
-  //     amount: 10000,
-  //     paid: 0,
-  //     description: "trả tiền tao",
-  //   },
-  // ];
 }
 
 function mapStateToProps(state) {
