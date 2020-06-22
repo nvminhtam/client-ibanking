@@ -16,8 +16,6 @@ const layout = {
     wrapperCol: { span: 16 },
 };
 
-
-
 const accountInfo = (info = {}) => (
     <div >
         <p><b>Beneficiary's Name:</b> {info.beneficiary_name}</p>
@@ -44,9 +42,7 @@ const renderItem = (title, count) => ({
 
 const options = (values = []) => [
     {
-        options: values.map((value, i) =>
-            value.partner_bank === null && renderItem(value.beneficiary_account, value.beneficiary_name)
-        ),
+        options: values.map((value, i) => ((value.partner_bank) === 'abc') && renderItem(value.beneficiary_account, value.beneficiary_name)),
     },
 ];
 
@@ -63,7 +59,7 @@ class Beneficiary extends Component {
     constructor(props) {
         super(props);
         this.state = {
-            isSaveBeneficiary: false,
+            isSaveBeneficiary: true,
             isDisable: true,
             Collapse: 0,
             accountBeneficiary: {}
@@ -71,6 +67,8 @@ class Beneficiary extends Component {
     }
 
     searchInfor(value) {
+        if (value === "" || value === undefined || value === null) return
+
         let isExist = false
         this.props.listAccountBeneficiary.forEach(acc => {
             if (acc.beneficiary_account === value) {
@@ -81,19 +79,19 @@ class Beneficiary extends Component {
         });
         //return here bug
         if (!isExist) {
+            console.log("isExist", isExist);
             const { getBeneficiaryAccount } = this.props
             getBeneficiaryAccount({ account_number: value });
 
-            if (this.props.users.success) {
-                this.setState({
-                    accountBeneficiary: {
-                        ...this.props.accountBeneficiary
-                    },
-                    Collapse: "1",
-                    isDisable: false
-                })
-            }
+            this.setState({
+                accountBeneficiary: {
+                    ...this.props.accountBeneficiary
+                },
+                Collapse: "1",
+                isDisable: false
+            })
         }
+
 
     }
 
@@ -127,14 +125,14 @@ class Beneficiary extends Component {
         const { accountOwner, listAccountBeneficiary } = this.props
         const { accountBeneficiary } = this.state
 
-        console.log(this.props);
+        // console.log(JSON.stringify(this.props));
         return (
             <div>
                 <Form
                     {...layout}
                     name="basic"
                     initialValues={{ remember: true, bank: "NKLBank" }}
-                    onFinish={(data) => this.props.onNext({ isSaveBeneficiary: this.state.isSaveBeneficiary, ...data })}
+                    onFinish={(data) => this.props.onNext(data)}
                     onFinishFailed={onFinishFailed}
                 >
                     <Form.Item label="Your account" className="border-bottom border-light p-3"
@@ -170,20 +168,20 @@ class Beneficiary extends Component {
                                 size="large"
                                 placeholder="input here"
                                 onSearch={(value) => { this.searchInfor(value) }}
+
                             />
                         </AutoComplete>
                     </Form.Item>
 
-                    {/* <Form.Item label="choose bank" className="border-bottom border-light p-3">
+                    <Form.Item label="choose bank" name="bank" className="border-bottom border-light p-3">
                         <Select
                         //   onChange={onGenderChange}
                         // defaultValue="NKLBank"
                         >
-                            <Option value="NKLBank">NKL Bank</Option>
                             <Option value="MPBank">MP Bank</Option>
                             <Option value="Q2Bank">Q2 Bank</Option>
                         </Select>
-                    </Form.Item> */}
+                    </Form.Item>
 
                     <Form.Item label="Save Beneficiary" className="border-bottom border-light pl-3">
                         <Checkbox disabled={this.state.isDisable} onChange={() => this.setState({ isSaveBeneficiary: !this.state.isSaveBeneficiary })} checked={this.state.isSaveBeneficiary}> </Checkbox>
@@ -200,7 +198,7 @@ class Beneficiary extends Component {
                     </Collapse>
 
                     <Form.Item >
-                        <Button type="primary" htmlType="submit">
+                        <Button type="primary" htmlType="submit" disabled={!this.props.users.error}>
                             Next
                    </Button>
                     </Form.Item>
@@ -220,8 +218,8 @@ const mapStateToProps = (state) => {
         accountOwner: users.accountOwner,
         accountBeneficiary: users.accountBeneficiary,
         listAccountBeneficiary: users.accountBeneficiarys,
-        // addError: users.addError,
         users: state.users
+        // addError: users.addError,
 
     };
 }

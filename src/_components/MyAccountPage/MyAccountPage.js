@@ -49,7 +49,7 @@ class MyAccountPage extends Component {
     }
 }
 
-function mapStateToProps(state) {
+const  mapStateToProps = (state) => {
     return {
         accountOwner: state.users.accountOwner,
     };

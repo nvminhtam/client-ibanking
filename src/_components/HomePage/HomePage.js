@@ -3,7 +3,7 @@ import { Link } from 'react-router-dom';
 import { connect } from 'react-redux';
 import { userActions } from '../../_actions';
 
-import { Menu, Button } from 'antd';
+import { Menu, Button, Modal, Space } from 'antd';
 import {
     AppstoreOutlined,
     MenuUnfoldOutlined,
@@ -18,9 +18,13 @@ import {
 import { TransferPage } from '../TransferPage'
 import { MyAccountPage } from '../MyAccountPage/MyAccountPage'
 import { BeneficiaryInforPage } from '../BeneficiaryInforPage/BeneficiaryInforPage'
+import { TransactionsTransferPage } from '../TransactionsHistoryPage/TransactionsTransfer/TransactionsTransferPage'
 import { CreateDebtPage } from '../DebtManagementPage/CreateDebtPage'
+import { ChangePasswordPage } from '../ChangePasswordPage/ChangePasswordPage'
+import { TransferInterBankPage } from '../TransferPage'
 
 const { SubMenu } = Menu;
+
 
 const comp = [
     {
@@ -32,8 +36,8 @@ const comp = [
         content: <BeneficiaryInforPage />,
     },
     {
-        title: "Thẻ",
-        content: "Page 3",
+        title: "Lịch sử giao dịch",
+        content: <TransactionsTransferPage />,
     },
     {
         title: "Chuyển hàng nội địa",
@@ -41,7 +45,7 @@ const comp = [
     },
     {
         title: "Ngân hàng khác",
-        content: "Page 3",
+        content: <TransferInterBankPage />,
     },
     {
         title: "Danh sách nợ",
@@ -52,18 +56,17 @@ const comp = [
         content: "Page 3",
     },
     {
-        title: "option 11",
-        content: "Page 3",
+        title: "change password",
+        content: <ChangePasswordPage />,
     },
 ];
-
 
 class HomePage extends React.Component {
     constructor(props) {
         super(props)
         this.state = {
             collapsed: false,
-            key: "3"
+            key: "0"
         }
     }
     componentDidMount() {
@@ -98,10 +101,10 @@ class HomePage extends React.Component {
         return (
             <div className="row" >
                 <div className="col-2" style={{ backgroundColor: '#000c17' }}>
-                    <div style={{ width: 200 }} >
-                        <Button type="primary" onClick={toggleCollapsed} >
+                    <div  >
+                        {/* <Button type="primary" onClick={toggleCollapsed} >
                             {React.createElement(this.state.collapsed ? MenuUnfoldOutlined : MenuFoldOutlined)}
-                        </Button>
+                        </Button> */}
                         <Menu
                             defaultSelectedKeys={['0']}
                             defaultOpenKeys={['sub1', 'sub2', 'sub3']}
@@ -117,7 +120,7 @@ class HomePage extends React.Component {
                                 Thông tin
                 </Menu.Item>
                             <Menu.Item key="2" icon={<ContainerOutlined />}>
-                                Thẻ
+                                Lịch sử giao dịch
                 </Menu.Item>
                             <SubMenu key="sub1" icon={<MailOutlined />} title="Chuyển tiền">
                                 <Menu.Item key="3">Ngân hàng nội địa</Menu.Item>
@@ -126,15 +129,15 @@ class HomePage extends React.Component {
                             <SubMenu key="sub2" icon={<AppstoreOutlined />} title="Danh sách">
                                 <Menu.Item key="5">Danh sách nợ</Menu.Item>
                                 <Menu.Item key="6">Danh sách người nhận</Menu.Item>
-                                <SubMenu key="sub3" title="Submenu">
-                                    <Menu.Item key="7">Option 11</Menu.Item>
+                                <SubMenu key="sub3" title="Tài khoản">
+                                    <Menu.Item key="7">Đổi mật khẩu</Menu.Item>
                                     <Menu.Item ><LogoutOutlined /> <Link to="/login">Logout</Link></Menu.Item>
                                 </SubMenu>
                             </SubMenu>
                         </Menu>
                     </div>
                 </div>
-                <div className="col-9 p-5"> <h2> {comp[this.state.key].title}</h2>
+                <div className="col-8 offset-1"> <h2> {comp[this.state.key].title}</h2>
                     {users.error && <span className="text-danger">ERROR: {users.error}</span>}
                     {users.success && <span className="text-success">SUCCESS: {users.success}</span>}
                     {comp[this.state.key].content}

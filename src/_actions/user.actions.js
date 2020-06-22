@@ -4,18 +4,22 @@ import { alertActions } from "./";
 import { history } from "../_helpers";
 
 export const userActions = {
-  login,
-  logout,
-  register,
-  getAll,
-  getAccount,
-  getBeneficiaryAccount,
-  getBeneficiaryAccounts,
-  updateListBeneficiaryInfo,
-  addBeneficiary,
-  transferIntrabank,
-  delete: _delete,
-  getDebtsList,
+
+    login,
+    logout,
+    register,
+    getAll,
+    getAccount,
+    getBeneficiaryAccount,
+    getBeneficiaryAccounts,
+    updateListBeneficiaryInfo,
+    addBeneficiary,
+    delete: _delete,
+    getTransactions,
+    transferIntrabank,
+    getOtp,
+    sendOtp,
+    getDebtsList
 };
 
 function login(username, password) {
@@ -236,6 +240,23 @@ function addBeneficiary(beneficiaryInfor) {
   }
 }
 
+
+function getTransactions(account_number) {
+    return dispatch => {
+        dispatch(request());
+
+        userService.getTransactions(account_number)
+            .then(
+                listTransactions => dispatch(success(listTransactions)),
+                error => dispatch(failure(error))
+                );
+        };
+        function request() { return { type: userConstants.GET_TRANSACTIONS_REQUEST} }
+        function success(listTransactions) { return { type: userConstants.GET_TRANSACTIONS_SUCCESS, listTransactions } }
+        function failure(error) { return { type: userConstants.GET_TRANSACTIONS_FAILURE, error } }
+    
+    }
+
 function transferIntrabank(transferInfor) {
   return (dispatch) => {
     dispatch(request());
@@ -278,4 +299,41 @@ function getDebtsList() {
   function failure(error) {
     return { type: userConstants.GET_DEBTLIST_FAILURE, error };
   }
+}
+
+
+
+
+function sendOtp(optMgs) {
+    return dispatch => {
+        dispatch(request());
+
+        userService.sendOtp(optMgs)
+            .then(
+                successMsg => dispatch(success(successMsg)),
+                error => dispatch(failure(error))
+            );
+    };
+
+    function request() { return { type: userConstants.SEND_OTP_REQUEST } }
+    function success(successOtpMsg) { return { type: userConstants.SEND_OTP_SUCCESS, successOtpMsg } }
+    function failure(error) { return { type: userConstants.SEND_OTP_FAILURE, error } }
+
+}
+
+function getOtp() {
+    return dispatch => {
+        dispatch(request());
+
+        userService.getOtp()
+            .then(
+                successMgs => dispatch(success(successMgs)),
+                error => dispatch(failure(error))
+            );
+    };
+
+    function request() { return { type: userConstants.GET_OTP_REQUEST } }
+    function success(successMgs) { return { type: userConstants.GET_OTP_SUCCESS, successMgs } }
+    function failure(error) { return { type: userConstants.GET_OTP_FAILURE, error } }
+
 }

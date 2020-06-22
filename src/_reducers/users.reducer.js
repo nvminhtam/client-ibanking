@@ -44,7 +44,8 @@ export function users(state = {}, action) {
       return {
         ...state,
         accountBeneficiary: action.accountBeneficiary || {},
-      };
+        success: "get infor success"
+      }
     case userConstants.GET_ACCOUNTINFO_FAILURE:
       return {
         ...state,
@@ -98,6 +99,21 @@ export function users(state = {}, action) {
         ...state,
         error: action.error,
       };
+    case userConstants.GET_TRANSACTIONS_REQUEST:
+      return {
+        ...state,
+        loading: true
+      };
+    case userConstants.GET_TRANSACTIONS_SUCCESS:
+      return {
+        ...state,
+        listTransactions: action.listTransactions || { transfers: [], receivers: [] }
+      };
+    case userConstants.GET_TRANSACTIONS_FAILURE:
+      return {
+        ...state,
+        addError: action.error
+      };
 
     case userConstants.TRANSFER_INTRABANK_REQUEST:
       return {
@@ -105,11 +121,46 @@ export function users(state = {}, action) {
         loading: true,
       };
     case userConstants.TRANSFER_INTRABANK_SUCCESS:
+      {
+        // console.log(action)
+        return {
+          ...state,
+          transferInforSuccess: action.transferInforSuccess || {},
+
+        };
+      }
+    case userConstants.TRANSFER_INTRABANK_FAILURE:
       return {
         ...state,
-        transferInforSuccess: action.transferInforSuccess || {},
+        error: action.error
       };
-    case userConstants.TRANSFER_INTRABANK_FAILURE:
+    case userConstants.SEND_OTP_REQUEST:
+      return {
+        ...state,
+        loading: true
+      };
+    case userConstants.SEND_OTP_SUCCESS:
+      return {
+        ...state,
+        successOtpMsg: action.successOtpMsg || {}
+      };
+    case userConstants.SEND_OTP_FAILURE:
+      return {
+        ...state,
+        error: action.error
+      };
+
+    case userConstants.GET_OTP_REQUEST:
+      return {
+        ...state,
+        loading: true
+      };
+    case userConstants.GETALL_SUCCESS:
+      return {
+        ...state,
+        sucess: action.sucess || {}
+      };
+    case userConstants.GETALL_FAILURE:
       return {
         ...state,
         error: action.error,

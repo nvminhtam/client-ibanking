@@ -5,11 +5,10 @@ import { UserOutlined, SolutionOutlined, LoadingOutlined, SmileOutlined } from '
 import { connect } from 'react-redux';
 import { userActions } from '../../_actions/user.actions';
 
-import { TransferInfo } from './TransferAtom/TransferInfo'
-import { BeneficiaryAccount } from './TransferAtom/BeneficiaryAccount';
-import { VerifyOTP } from './TransferAtom/VerifyOTP'
+import { TransferInfo } from './TransferInterAtom/TransferInfo'
+import { BeneficiaryAccount } from './TransferInterAtom/BeneficiaryAccount';
+import { VerifyOTP } from './TransferInterAtom/VerifyOTP'
 const { Step } = Steps;
-
 
 
 const steps = [
@@ -29,7 +28,7 @@ const steps = [
 ];
 
 
-class TransferPage extends Component {
+class TransferInterBankPage extends Component {
     constructor(props) {
         super(props);
         this.state = {
@@ -44,24 +43,12 @@ class TransferPage extends Component {
     }
 
     next(data) {
-        console.log(data.receiver)
 
-        if (this.state.current === 0) {
-            if (data.isSaveBeneficiary)
-                this.props.addBeneficiary({ beneficiary_account: data.receiver })
-        }
         if (this.state.current == 2) {
             this.props.sendOtp(data)
             if (!this.props.users.error) {
 
-                const transferInfor = {
-                    depositor: this.state.data.depositor,
-                    receiver: this.state.data.receiver,
-                    amount: this.state.data.amount,
-                    note: this.state.data.note,
-                    charge_include: this.state.data.charge_include
-                }
-                this.props.transferIntrabank(transferInfor)
+                this.props.transferIntrabank(this.state.data)
                 if (!this.props.users.error)
                     message.success(this.props.users.error)
             }
@@ -76,6 +63,8 @@ class TransferPage extends Component {
                 }
             });
         }
+
+
 
     }
 
@@ -95,7 +84,6 @@ class TransferPage extends Component {
             // </div>
             <div className="shadow-lg p-3 mb-5 bg-white rounded">
                 {/* {JSON.stringify(this.props.users)} */}
-                {this.props.transferInforSuccess}
                 <div className="steps-content">
                     <div className="p-5 border bg-white">
                         {steps[current].content((data) => this.next(data))}
@@ -117,20 +105,18 @@ class TransferPage extends Component {
 const mapStateToProps = (state) => {
     return {
         successOtpMsg: state.users.successOtpMsg,
-        users: state.users,
-        transferInforSuccess: state.users.transferInforSuccess
+        users: state.users
     };
 }
 
 const mapDispatchToProps = (dispatch) => ({
     sendOtp: (OtpMsg) => dispatch(userActions.sendOtp(OtpMsg)),
     transferIntrabank: (transferInfor) => dispatch(userActions.transferIntrabank(transferInfor)),
-    addBeneficiary: (beneficiaryInfo) => dispatch(userActions.addBeneficiary(beneficiaryInfo)),
 });
 
 
-const connectedTransferPage = connect(mapStateToProps, mapDispatchToProps)(TransferPage);
+const connectedTransferInterBankPage = connect(mapStateToProps, mapDispatchToProps)(TransferInterBankPage);
 
-export { connectedTransferPage as TransferPage }
+export { connectedTransferInterBankPage as TransferInterBankPage }
 
 

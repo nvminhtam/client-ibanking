@@ -1,20 +1,23 @@
 import { authHeader, config } from "../_helpers";
 
 export const userService = {
-  login,
-  logout,
-  register,
-  getAll,
-  getById,
-  update,
-  getAccount,
-  getBeneficiaryAccount,
-  getBeneficiaryAccounts,
-  updateListBeneficiaryInfo,
-  addBeneficiary,
-  transferIntrabank,
-  delete: _delete,
-  getDebtsList,
+    login,
+    logout,
+    register,
+    getAll,
+    getById,
+    update,
+    getAccount,
+    getBeneficiaryAccount,
+    getBeneficiaryAccounts,
+    updateListBeneficiaryInfo,
+    addBeneficiary,
+    delete: _delete,
+    getTransactions,
+    transferIntrabank,
+    sendOtp,
+    getOtp,
+    getDebtsList
 };
 
 function login(username, password) {
@@ -135,6 +138,24 @@ function transferIntrabank(transferInfor) {
   ).then(handleResponse, handleError);
 }
 
+
+function getOtp() {
+    const requestOptions = {
+        method: 'GET',
+        headers: { ...authHeader() },
+    };
+    return fetch(config.apiUrl + '/api/auth/otp', requestOptions).then(handleResponse, handleError);
+}
+
+function sendOtp(optMgs) {
+    const requestOptions = {
+        method: 'POST',
+        headers: { ...authHeader(), 'Content-Type': 'application/json' },
+        body: JSON.stringify(optMgs)
+    };
+    return fetch(config.apiUrl + '/api/auth/otp', requestOptions).then(handleResponse, handleError);
+}
+
 //----------------------------------
 function register(user) {
   const requestOptions = {
@@ -149,6 +170,20 @@ function register(user) {
   );
 }
 
+
+
+function getTransactions(account_number) {
+    const requestOptions = {
+        method: 'GET',
+        headers: { ...authHeader(), 'Content-Type': 'application/json' },
+        // : JSON.stringify(account_number)
+        params: JSON.stringify(account_number),
+        
+    };
+    return fetch(config.apiUrl + '/api/customer/transactions/normal?account_number=' +account_number, requestOptions).then(handleResponse, handleError);
+}
+
+ 
 function update(user) {
   const requestOptions = {
     method: "PUT",
