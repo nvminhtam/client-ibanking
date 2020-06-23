@@ -1,0 +1,182 @@
+
+import React, { useReducer } from 'react'
+import axios from 'axios';
+import UserContext from './userContext'
+import userReducer from './userReducer'
+import setAuthToken from '../../utils/setAuthToken'
+import {
+    GET_ACCOUNT,
+    ACCOUNTOWNERS_ERROR,
+    GET_BENEFICIARIES,
+    BENEFICIARIES_ERROR,
+    ADD_BENEFICIARY,
+    BENEFICIARY_ERROR,
+    UPDATE_BENEFICIARIES,
+    UPDATE_BENEFICIARIES_ERROR,
+    CHANGE_PASSWORD,
+    CHANGE_PASSWORD_ERROR,
+    GET_BENEFICIARY,
+    USER_ERROR
+    // BENEFICIARY_ERROR,
+
+} from '../types'
+
+const UserState = props => {
+    const initialState = {
+        loading: null,
+        accountsOwner: [],
+        beneficiaries: [],
+        error: null,
+        success: null,
+        beneficiary: {},
+        addBeneficiaryRes: null,
+        token: localStorage.getItem('token')
+    }
+
+    const [state, dispatch] = useReducer(userReducer, initialState)
+
+
+    //get account user
+
+    const getAccounts = async () => {
+        setAuthToken(JSON.parse(localStorage.getItem("token"))["accessToken"]);
+
+        try {
+            const res = await axios.get('/api/customer/accounts');
+            dispatch({
+                type: GET_ACCOUNT,
+                payload: res.data
+            });
+        } catch (err) {
+            dispatch({
+                type: USER_ERROR,
+                payload: err.response
+            });
+        }
+    };
+
+    //get list beneficiary
+
+    const getBeneficiries = async () => {
+
+        setAuthToken(JSON.parse(localStorage.getItem("token"))["accessToken"]);
+
+        try {
+            const res = await axios.get('/api/customer/beneficiaries');
+
+            dispatch({
+                type: GET_BENEFICIARIES,
+                payload: res.data
+            });
+        } catch (err) {
+            dispatch({
+                type: USER_ERROR,
+                payload: err.response
+            });
+        }
+    }
+
+    //add beneficiary
+
+    const addBeneficiary = async contact => {
+        setAuthToken(JSON.parse(localStorage.getItem("token"))["accessToken"]);
+
+        try {
+            const res = await axios.post('/api/customer/add-beneficiary', contact);
+
+            dispatch({
+                type: ADD_BENEFICIARY,
+                payload: res.data
+            });
+        } catch (err) {
+            console.log(err.response);
+            dispatch({
+                type: USER_ERROR,
+                payload: err.response
+            });
+        }
+    };
+
+    //update list beneficiary
+
+    const updateListBeneficiaryInfo = async (listInfo) => {
+        setAuthToken(JSON.parse(localStorage.getItem("token"))["accessToken"]);
+
+        try {
+            const res = await axios.post('/api/customer/update-beneficiary/', listInfo);
+
+            dispatch({
+                type: UPDATE_BENEFICIARIES,
+                payload: res.data
+            });
+        } catch (err) {
+            dispatch({
+                type: USER_ERROR,
+                payload: err.response
+            });
+        }
+    }
+
+    //change password
+
+    const changePassword = async (passwords) => {
+        setAuthToken(JSON.parse(localStorage.getItem("token"))["accessToken"]);
+
+        try {
+            const res = await axios.put('/api/customer/passwords/ibanking', passwords);
+
+            dispatch({
+                type: CHANGE_PASSWORD,
+                payload: res.data
+            });
+        } catch (err) {
+            dispatch({
+                type: USER_ERROR,
+                payload: err.response
+            });
+        }
+    }
+
+    // get beneficiary account
+
+    const getBeneficiry = async (accnumber) => {
+
+        setAuthToken(JSON.parse(localStorage.getItem("token"))["accessToken"]);
+
+        try {
+            const res = await axios.post('/api/account/', accnumber);
+
+            dispatch({
+                type: GET_BENEFICIARY,
+                payload: res.data
+            });
+        } catch (err) {
+            dispatch({
+                type: BENEFICIARY_ERROR,
+                payload: err.response
+            });
+        }
+    }
+
+    return (
+        <UserContext.Provider
+            value={{
+                accountsOwner: state.accountsOwner,
+                beneficiaries: state.beneficiaries,
+                addBeneficiaryRes: state.addBeneficiaryRes,
+                beneficiary: state.beneficiary,
+                success: state.success,
+                error: state.error,
+                getAccounts,
+                getBeneficiries,
+                updateListBeneficiaryInfo,
+                addBeneficiary,
+                changePassword,
+                getBeneficiry
+            }}>
+            {props.children}
+        </UserContext.Provider>
+    )
+}
+
+export default UserState
