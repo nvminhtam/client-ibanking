@@ -62,6 +62,10 @@ const BeneficiaryAccount = () => {
 
     const [collapse, setCollapse] = useState(true)
     const [beneficiaryAcc, setBeneficiaryAcc] = useState({})
+    const [accountBeneficiary, setAccountBeneficiary] = useState({})
+    const [isSaveBeneficiary, setIsSaveBeneficiary] = useState(false)
+    const [savebleBeneficiary, setSavebleBeneficiary] = useState(false)
+
     const searchInfor = (value) => {
         console.log(value)
         let isExist = false
@@ -81,14 +85,21 @@ const BeneficiaryAccount = () => {
 
                 setBeneficiaryAcc(beneficiary)
                 setCollapse("1")
-                // isDisable: false
-
+                setSavebleBeneficiary(true)
             }
         }
 
     }
 
     const onSelect = (value) => {
+        beneficiaries.forEach(acc => {
+            if (acc.beneficiary_account === value) {
+                console.log("value", acc);
+                setAccountBeneficiary(acc)
+                setCollapse("1");
+                setSavebleBeneficiary(false)
+            }
+        });
         // this.props.listAccountBeneficiary.forEach(acc => {
         //     if (acc.beneficiary_account === value) {
         //         this.setState({
@@ -108,7 +119,7 @@ const BeneficiaryAccount = () => {
     // const { accountBeneficiary } = this.state
 
     // console.log(this.props);
-    const accountOwner = []
+    // const accountOwner = []
     return (
         <div>
             <Form
@@ -145,18 +156,17 @@ const BeneficiaryAccount = () => {
                         dropdownClassName="certain-category-search-dropdown"
                         options={options(beneficiaries)}
                         onSelect={onSelect}
-
                     >
                         <Input.Search
                             size="large"
                             placeholder="input here"
-                            onSearch={searchInfor}
+                            onSearch={(value) => console.log(value)}
                         />
                     </AutoComplete>
                 </Form.Item>
 
                 <Form.Item label="Save Beneficiary" className="border-bottom border-light pl-3">
-                    {/* <Checkbox disabled={this.state.isDisable} onChange={() => this.setState({ isSaveBeneficiary: !this.state.isSaveBeneficiary })} checked={this.state.isSaveBeneficiary}> </Checkbox> */}
+                    <Checkbox disabled={!savebleBeneficiary} onChange={() => setIsSaveBeneficiary(!isSaveBeneficiary)}> </Checkbox>
                 </Form.Item>
                 <Collapse
                     activeKey={[collapse]}
@@ -165,7 +175,7 @@ const BeneficiaryAccount = () => {
                     className="site-collapse-custom-collapse bg-light mb-4"
                 >
                     <Panel header="Beneficiary's Information" key="1" className="site-collapse-custom-panel">
-                        {accountInfo(beneficiaryAcc)}
+                        {accountInfo(accountBeneficiary)}
                     </Panel>
                 </Collapse>
 

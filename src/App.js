@@ -8,8 +8,8 @@ import Login from './components/auth/Login'
 import Alerts from './components/layout/Alerts';
 import PrivateRoute from './components/routing/PrivateRoute';
 
-
-import CustomerState from './context/customer/customerState'
+import EmployeeState from './context/employee/employeeState'
+import AdminState from './context/admin/adminState'
 import AuthState from './context/auth/AuthState'
 import AlertState from './context/alert/AlertState';
 import UserState from './context/user/userState'
@@ -19,26 +19,28 @@ const App = () => {
   return (
     <AuthState>
       <UserState>
-        <CustomerState>
-          <AlertState>
-            <Router>
-              <Fragment>
-                <Switch>
-                  <div>
-                    {/* <NavBar /> */}
-                    {/* <div className="offset-1 mt-3 shadow bg-white rounded border d-flex justify-content-center align-items-center" style={{ width: 65 + '%' }}> */}
-                    <Alerts />
-                    <PrivateRoute exact path='/' component={Home} />
-                    {/* <PrivateRoute path='/register' component={Register} /> */}
-                    {/* <Route exact path="/" component={Home} /> */}
-                    <Route exact path="/login" component={Login} />
-                    {/*</div> */}
-                  </div>
-                </Switch>
-              </Fragment>
-            </Router>
-          </AlertState>
-        </CustomerState>
+        <AlertState>
+          <EmployeeState>
+            <AdminState>
+              <Router>
+                <Fragment>
+                  <Switch>
+                    <div>
+                      {/* <NavBar /> */}
+                      {/* <div className="offset-1 mt-3 shadow bg-white rounded border d-flex justify-content-center align-items-center" style={{ width: 65 + '%' }}> */}
+                      <Alerts />
+                      <PrivateRoute exact path='/' component={Home} />
+                      {/* <PrivateRoute path='/register' component={Register} /> */}
+                      {/* <Route exact path="/" component={Home} /> */}
+                      <Route exact path="/login" component={Login} />
+                      {/*</div> */}
+                    </div>
+                  </Switch>
+                </Fragment>
+              </Router>
+            </AdminState>
+          </EmployeeState>
+        </AlertState>
       </UserState>
     </AuthState>
   );
